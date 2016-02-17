@@ -2,7 +2,7 @@ set_params
 load(ts_paramfile);
 ndates=length(dates);
 buffer=1000;
-
+%a test change
 [nx,ny]=load_rscs(dates(id).rectslc,'WIDTH','FILE_LENGTH');
 
 nbuf=ceil(ny/buffer);
