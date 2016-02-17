@@ -1,6 +1,7 @@
 set_params
 load(ts_paramfile);
 ndates  = length(dates);
+
 %here is a change
 
 %master int must have been run first, to determine any starting line offset.
