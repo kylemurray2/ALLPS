@@ -17,5 +17,5 @@ for l=1:length(rlooks)
         end
     end
 end
-fclose(fid1);
+% fclose(fid1);
 
