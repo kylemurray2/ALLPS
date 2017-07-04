@@ -1,5 +1,4 @@
-set_params
-load(ts_paramfile);
+getstuff
 ndates=length(dates);
 im=sqrt(-1);
 
