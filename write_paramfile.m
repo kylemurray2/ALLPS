@@ -64,7 +64,7 @@ fprintf(fid,'searchwin = 64; %%ampcor search window size\n\n');
 fprintf(fid,'dopcutoff=400;\n');
 fprintf(fid,'azcutoff=500;\n\n');
 
-fprintf(fid,'rlooks      = [4]; %%can be larger vector\n');
+fprintf(fid,'rlooks      = [2]; %%can be larger vector\n');
 fprintf(fid,['pixel_ratio = ' num2str(pixel_ratio) ';\n']);
 fprintf(fid,'alooks      = rlooks*pixel_ratio;\n');
 
