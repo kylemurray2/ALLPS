@@ -1,8 +1,7 @@
-function run_all(track,frame,sat,id)
 %id: master date id.  Change based on plot from search_data or your own intuition.
 clear all;close all
 track=485;
-frame=2889;
+frame=2871;
 sat='ENVI';
 plotflag=1;
 id=1;
@@ -10,7 +9,7 @@ mkdir('figs')
 masterdir = [pwd '/'];%['/data/kdm95/' sat '/' num2str(track) '_' num2str(frame) '/']; %For now, set this by hand, make sure it exists, and run from this dir.
 
     [dn,footprints,searchresults,sortresults,sortdn,apiCall]=search_data(track,frame,sat,1,[]);
- [dn,searchresults,sortdn,sortresults]=I_subset([50:56],dn,searchresults,sortdn,sortresults); %do only these date ids     
+%  [dn,searchresults,sortdn,sortresults]=I_subset([50:56],dn,searchresults,sortdn,sortresults); %do only these date ids     
     write_paramfile(sat,masterdir,id,footprints,1,2,track,frame); %writes set_params.m, which you can edit.
     init_dirs;                                %initializes timeseries directories
     make_dates_struct(sortdn,sortresults);    %makes dates structure, stores in ts_params.mat
@@ -21,6 +20,7 @@ setup_init
 read_dopbase_km %selects dates that don't violate doppler, baseline, az off
 choose_ints_km  %chooses set of interferograms, add or remove pairs by editing set_params.m
 disp('Add or remove pairs and rerun from setup_init. When satisfied continue to make_slcs')
+
 
 %%
 make_slcs  %This really shouldn't fail.
@@ -94,8 +94,8 @@ rms_thresh=100 %choose rms cutoff
 rp=[rp;[ints(abs([ints.rms])>rms_thresh).i1; ints(abs([ints.rms])>rms_thresh).i2]']
 
 %Geocode and make .kml file
-geocode('rates_4','geo_rates_2.unw') %Geocodes the rates_4 file and makes geo_rates_2.unw
-unw2png_km('geo_rates_2.unw',[sat '_T' num2str(track) '_' num2str(frame) '.png'],2,30,50) %infile, outfile, mode(1 is amp, 2 is phs),wraprate,scale(% resize)
+geocode('rates_2','geo_rates_2.unw') %Geocodes the rates_4 file and makes geo_rates_2.unw
+unw2png_km('geo_rates_2.unw',[sat '_T' num2str(track) '_' num2str(frame) '.png'],2,10,50) %infile, outfile, mode(1 is amp, 2 is phs),wraprate,scale(% resize)
 make_frame_gmt
 
  mysys('unw2grd.pl geo_rates_2.unw ALOS_T210_670.grd 1')
