@@ -12,7 +12,7 @@ switch sat
         passw = 'Rolohman1';
 
 end
-parfor ii=31%1:length(dn)
+parfor ii=1:length(dn)
     tic
 %     if ~exist(dates(i).raw,'file')
         parraw(ii,sat,searchresults,dn,sortdn,uname,passw)
@@ -31,13 +31,12 @@ for ii=1:length(dates)
     end
 end
 
-
-    disp('Throwing out following dates!')
+if(badid)
     for i=1:length(badid)
         disp(dates(badid(i)).name)
     end
 
-reply = input(['Remove bad dates from dates struct? y/n [y] '],'s')
+reply = input(['Could not make .raw files for above dates. They probably do not have orbit files available. Remove them from dates struct? y/n [y] '],'s')
         if(isempty(reply))
            reply='Y';
         end
@@ -62,7 +61,5 @@ reply = input(['Remove bad dates from dates struct? y/n [y] '],'s')
             disp('not changing anything.')
           return
     end
-
-
-    
+end
     
