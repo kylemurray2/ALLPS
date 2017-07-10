@@ -15,6 +15,7 @@ masterdir = [pwd '/'];%['/data/kdm95/' sat '/' num2str(track) '_' num2str(frame)
     make_dates_struct(sortdn,sortresults);    %makes dates structure, stores in ts_params.mat
     load_data;   %After: Check to see if each dir now has data files  
     disp('Raw files have been created. Now start at setup_init.')
+write_slc_proc
 setup_init
 % setup_init_runPar   %runs process_2pass through baseline computation relative to master
 read_dopbase_km %selects dates that don't violate doppler, baseline, az off
@@ -27,8 +28,8 @@ make_slcs  %This really shouldn't fail.
 master_int %This needs to be run before rect_slcs, to determine any offsets of the master relative to SIM
 
 % %remove Bad interferograms?
-    baddateids=[33];
-    replace_dates_struct(baddateids,1)
+%     baddateids=[33];
+%     replace_dates_struct(baddateids,1)
 
 rect_slcs   %If this does not result in rectified SLCs, you have a problem and must tinker by and in TS/rect/rectfiles.  Requires resamp_roi_nofilter compiled. 
 calamp      %calculates mean amplitude in each slc
