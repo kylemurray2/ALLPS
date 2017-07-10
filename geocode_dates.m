@@ -2,14 +2,11 @@ clear all;close all
 getstuff
 oldintdir = [masterdir 'int_' dates(ints(intid).i1).name '_' dates(ints(intid).i2).name '/'];
 
-
-
 % crop_edges_dates([1*4 1*4 30*8 1*8]); %full res location of crop (so that it works for multiple rlooks, left right, top, bottom. RLBT?
-
 
 for ii=1:length(dates)
     froot=[rlkdir{1} dates(ii).name];
-    unw_in=[froot '_4rlks.r4'];
+    unw_in=[froot '_' num2str(rlooks) 'rlks.r4'];
 
     %Step 1. Create rmg file
     amp_img = unw_in;
