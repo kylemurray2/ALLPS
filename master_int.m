@@ -11,7 +11,7 @@ if(~exist([DEMdir 'tmp.dem']))
 end
 procname=[masterdir 'int_' dates(ints(intid).i1).name '_' dates(ints(intid).i2).name '.proc'];
 
-Simrlks=1; %Kyle, this is what I changed.
+Simrlks=2; %Kyle, this is what I changed.
 
 fid=fopen(procname ,'w');
 fprintf(fid,['SarDir1=' masterdir dates(ints(intid).i1).name '\n']);
