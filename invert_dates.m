@@ -16,8 +16,6 @@ end
 newnx   = floor(nx./rlooks)
 newny   = floor(ny./alooks);
 
-
-
 [G,Gg,R,N]=build_Gint;
 [m,n]=size(Gg);
 
@@ -39,7 +37,7 @@ for l=1:length(rlooks)
     end
     for i=1:ndates
         
-        fido(i)=fopen(dates(i).unwrlk{l},'w');
+        fido(i)=fopen([rlkdir{1} dates(i).name '_' num2str(rlooks) 'rlks.r4'],'w');
     end
     fido2=fopen(['res_' num2str(rlooks(l))],'w');
     
