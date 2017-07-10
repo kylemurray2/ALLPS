@@ -62,7 +62,7 @@ kylestyle
 
 % save(['/data/kdm95/Kern/CRCN_TS/' sat '_pts','dy','ts_phs'])
 %get the GPS site
-%  [gps_year, gps_e, gps_n, gps_v]=readGPS_TS('CRCN',1);
+[gps_year, gps_e, gps_n, gps_v]=readGPS_TS('CRCN',1);
 
 %get rid of offset in gps data
 gps_v(1932:end) = gps_v(1932:end) + (-gps_v(1932)+gps_v(1930));
