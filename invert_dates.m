@@ -1,21 +1,7 @@
 function invert_dates(topoflag)
 % topoflag=0;
 %0 looks for unwrlk{l}, 1 adds _topo.unw to name.
-set_params
-load(ts_paramfile);
-
-ndates  = length(dates);
-nints   = length(ints);
-if strcmp(sat,'S1A')
-    nx=ints(id).width;
-    ny=ints(id).length;
-else
-    [nx,ny]= load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH');
-    
-end
-newnx   = floor(nx./rlooks)
-newny   = floor(ny./alooks);
-
+getstuff
 [G,Gg,R,N]=build_Gint;
 [m,n]=size(Gg);
 
@@ -30,10 +16,10 @@ for l=1:length(rlooks)
             disp([infile ' does not exist'])
             return
         end
-        mysys(['rmg2mag_phs ' infile ' mag phs ' num2str(newnx)])
-        fidi(i)=fopen('phs','r');
-        !rm phs
-        %         fidi(i)=fopen(infile,'r');
+        %  mysys(['rmg2mag_phs ' infile ' mag phs ' num2str(newnx)])
+        fidi(i)=fopen(infile,'r');
+%         !rm phs
+        % fidi(i)=fopen(infile,'r');
     end
     for i=1:ndates
         
@@ -47,7 +33,7 @@ for l=1:length(rlooks)
         tmpdat=zeros(n,newnx(l)); %data for n-nints = zeros
         for i=1:nints
             
-            jnk         = fread(fidi(i),newnx(l),'real*4');
+            jnk = fread(fidi(i),newnx(l),'real*4');
             tmpdat(i,1:length(jnk))=jnk;
         end
         
@@ -70,4 +56,4 @@ end
 %be high in places where the model isn't doing a good job predicting the
 %deformation.  This will happen if there is a lot of noise in a particular
 %int (like atm delays), decorrelated areas, areas with unwrapping errors
-%or areas with aliased deformation signals. 
+%or areas with aliased deformation signals.
