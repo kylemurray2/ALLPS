@@ -66,10 +66,10 @@ switch flag
      case 3  %plot inferred time series, by date
         for i=1:ndates
             fid=fopen(char(dates(i).unwrlk),'r');
-            def=fread(fid,[newnx(l),newny(l)*2],'real*4');
+            def=fread(fid,[newnx(l),newny(l)],'real*4');
             def=def';
             def(badid)=NaN;
-            imagesc(def)
+            imagesc(def);colorbar;
             title(dates(i).name)
             title(dates(i).name)
             pause(1)
