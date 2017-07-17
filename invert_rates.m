@@ -18,18 +18,15 @@ newny   = floor(ny./alooks);
 % [newnx,newny,lambda] = load_rscs('TS/looks4/4rlks','WIDTH','FILE_LENGTH','WAVELENGTH');
 % end
 
-[X,Y] = meshgrid(1:newnx,1:newny);
+% [X,Y] = meshgrid(1:newnx,1:newny);
 
 dn    = [dates.dn];
 dn    = dn-dn(1);
 
 for l=1:length(rlooks)
-%for l=1:1
-[X,Y]=meshgrid(1:newnx(l),1:newny(l));
-  
+ 
     alld=zeros(ndates,newny(l),newnx(l));
     for i=1:ndates
-%             da=['/data/kdm95/Kern/ENVI/485_2889_all/TS/looks4/dates/' dates(i).name '_4rlks.r4'];
         fid=fopen(dates(i).unwrlk{1},'r');
         tmp=fread(fid,[newnx(l),newny(l)],'real*4');
         alld(i,:,:)=tmp';
