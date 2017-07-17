@@ -40,18 +40,19 @@ make_ramps
 flat_ints
 makeGamma(0) %0, 1, 2, or 3
 makeGamma(1)
-make_mask(0.2)     %outputs not really used right now...
+make_mask(0.2)
 smart_rlooks_2
 % smart_rlooks_runpar  %buffers could make this faster.  Lots of I/O
 crop_edges([1*4 1*4 1*8 1*8]); %full res location of crop (so that it works for multiple rlooks, left right, top, bottom.
 % ps_interp_runpar
 ps_interp
 unwrap_rlooks %uses interp files now, does snaphu with tiles. 
-mask_unwrapped %masks using the gamma_4rlks.r4 file. first band is unmasked, second band is masked
-unw2png_km1(2,10,15) %(mode,wraprate,scale%) make a .png image of each unw_4lks in TS/looks4/png_files/
-disp('Examine the unwrapped ints and decide if filtering is required.')
 
-return
+% mask_unwrapped %masks using the gamma_4rlks.r4 file. first band is unmasked, second band is masked
+% unw2png_km1(2,10,15) %(mode,wraprate,scale%) make a .png image of each unw_4lks in TS/looks4/png_files/
+% disp('Examine the unwrapped ints and decide if filtering is required.')
+% 
+% return
 %__________________________________________________________________________
 %Try filtering, unwrapping, subtract unw from filtered, then add 2pi*n to
 %unfiltered int:
@@ -66,8 +67,8 @@ return
 % filter_unw_diff(1)
 
 %remove Bad interferograms?________________________________________________
-    badintids=[2 5 7 8 9 10 11];
-    replace_ints_struct(badintids,1);set_params;load(ts_paramfile);
+%     badintids=[2 5 7 8 9 10 11];
+%     replace_ints_struct(badintids,1);set_params;load(ts_paramfile);
 %      Mode=1: This will remove badintids from ints structure
 %      Mode=2: This will change ints structure back to the original
 %__________________________________________________________________________
@@ -75,13 +76,14 @@ return
 %iterate over this chunk
 invert_dates(0); %1 looks for .unw_topo.unw files (not made til fitramp_int), 0 looks for normal unw files. 
     %%%this generates TS/looks#/date.r4 files and res#.  Res# will have a ramp if not alligned. Choose thresh accordingly
-thresh      =2; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
+thresh      =6; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
 edge       = [100 100 10 10*8]; %pixels from left, right, top, bottom edges to mask
 waterheight = [-10]; %mask all pixels with height < waterheight.
 topoflag    = [];
 boxedge     = [0 0 0 0];%[2437 2636 1357 1582]*4;
 fitramp_int(thresh,edge,waterheight,topoflag,boxedge,1);  %topoflag=1 removes topo and writes to *_topo.unw files, 0 is normal. Now uses rates file, if it exists!
-return
+invert_dates(0);
+
 unwrap_flat %this can or can not be used - will reunwrap the now-flatter interferograms. Then iterate as above.
 
 %%
