@@ -1,27 +1,15 @@
-set_params
-load(ts_paramfile);
-
-ndates  = length(dates);
-nints   = length(ints);
-[nx,ny] = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH');
-
-im=sqrt(-1);
-
-
-newnx=floor(nx./rlooks)
-newny=floor(ny./alooks);
-
+getstuff
 
 win=ones(alooks,rlooks);
 win=win/sum(win(:));
 rangevec=[0:newnx-1]*rlooks+1;
 
 fid1    = fopen(gammafile,'r');
-gam=fread(fid1,nx,'real*4');
+gamm=fread(fid1,[ny,nx],'real*4');
 fclose(fid1);
 
 for l=1:length(rlooks)
-    parfor k=1%:nints
+    parfor k=1:nints
         if(~exist(ints(k).flatrlk{l},'file'));
             fid2    = fopen(ints(k).flat,'r');
             fid3    = fopen(ints(k).flatrlk{l},'w');
@@ -29,6 +17,7 @@ for l=1:length(rlooks)
             for j=1:newny(l)
                 mask = zeros(alooks(l),nx);
                 int  = zeros(alooks(l),nx);
+                gam  = gamm(j,:);
                 for i=1:alooks(l)
                     if(length(gam)==nx)
                         mask(i,:)=gam(1:nx);
@@ -64,14 +53,11 @@ for l=1:length(rlooks)
                 fwrite(fid3,phs,'real*4');
                 fwrite(fid4,phscor,'real*4');
             end            
-
             fclose(fid2);
             fclose(fid3);
             fclose(fid4);
         else
             disp([ints(k).flatrlk{l} ' already done']);
         end
-        
-    end
-    
+    end 
 end
