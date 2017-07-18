@@ -5,7 +5,7 @@ nints=length(ints);
 
 [nx,ny]=load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH');
 
-for i=intid %now only need to make one?  Perhaps not that in future
+for i=1% %now only need to make one?  Perhaps not that in future
     if(~exist([ints(i).int '.rsc'],'file'))
         disp(['making ' ints(i).int])
         fid1=fopen(dates(ints(i).i1).rectslc,'r');
