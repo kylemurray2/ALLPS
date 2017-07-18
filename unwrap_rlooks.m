@@ -8,11 +8,20 @@
 clear all;close all
 getstuff
 
-write_snaphu_conf; %uses parallel processing and tiles
+write_snaphu_conf(19,13,38); %(ntilerow,ntilecol,nproc) \\ uses parallel processing and tiles
 
-    for k=1:nints
-        %         if(~exist([ints(k).unwrlk{1}],'file'))
+for k=1:nints
+    if(~exist([ints(k).unwrlk{1} '_orig'],'file'))
+        if(exist([ints(k).unwrlk{1}],'file'))
+            movefile([ints(k).unwrlk{1}],[ints(k).unwrlk{1} '_orig'])
+            disp(['moving ' ints(k).unwrlk{1} ' to ' ints(k).unwrlk{1} '_orig']);
+        end
+    end
+end
+    
+for k=1:nints
+    if(~exist([ints(k).unwrlk{1}],'file'))
         disp(['unwrapping ' ints(k).flatrlk{1}]);
         system(['snaphu -f ' ints(k).unwrlk{1} '_snaphu.conf >> tmp_log']);
-        %         end
     end
+end
