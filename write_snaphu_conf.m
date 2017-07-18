@@ -1,3 +1,10 @@
+function write_snaphu_conf(ntilerow,ntilecol,nproc)
+% ntilerow: how many tiles rows
+% ntilecol: how many tiles cols
+% nproc: how many processors to split the tile processes on (Mongoose has
+% 40 cores, and packrat has 32
+
+getstuff
 for ii=1:nints
     
     conf =[ints(ii).unwrlk{1} '_snaphu.conf'];
@@ -25,11 +32,11 @@ for ii=1:nints
     fprintf(fid,['OUTFILEFORMAT           FLOAT_DATA                              \n']);
     fprintf(fid,['CORRFILEFORMAT          FLOAT_DATA                              \n']);
     fprintf(fid,['                                                                \n']);
-    fprintf(fid,['NTILEROW 20                                                      \n']);
-    fprintf(fid,['NTILECOL 14                                                     \n']);
+    fprintf(fid,['NTILEROW ' num2str(ntilerow) '                                  \n']);
+    fprintf(fid,['NTILECOL ' num2str(ntilecol) '                                  \n']);
     fprintf(fid,['# Maximum number of child processes to start for parallel tile  \n']);
     fprintf(fid,['# unwrapping.                                                   \n']);
-    fprintf(fid,['NPROC                 35                                      \n']);
+    fprintf(fid,['NPROC  '               num2str(nproc) '                         \n']);
     fprintf(fid,['ROWOVRLP 100                                                    \n']);
     fprintf(fid,['COLOVRLP 100                                                    \n']);
     fprintf(fid,['RMTMPTILE TRUE                                                  \n']);
@@ -38,4 +45,4 @@ for ii=1:nints
     
 end
 
-disp('unwrapping on 35 cores, with 20x14 tiles')
+disp(['unwrapping on ' num2str(nproc) ' cores, with ' num2str(ntilerow) 'x' num2str(ntilecol) ' tiles'])
