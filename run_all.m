@@ -1,7 +1,7 @@
 %id: master date id.  Change based on plot from search_data or your own intuition.
 clear all;close all
 track=485;
-frame=2871;
+frame=2889;
 sat='ENVI';
 plotflag=1;
 id=1;
@@ -15,7 +15,7 @@ masterdir = [pwd '/'];%['/data/kdm95/' sat '/' num2str(track) '_' num2str(frame)
     make_dates_struct(sortdn,sortresults);    %makes dates structure, stores in ts_params.mat
     load_data;   %After: Check to see if each dir now has data files  
     disp('Raw files have been created. Now start at setup_init.')
-write_slc_proc
+% write_slc_proc
 setup_init
 % setup_init_runPar   %runs process_2pass through baseline computation relative to master
 read_dopbase_km %selects dates that don't violate doppler, baseline, az off
@@ -24,7 +24,7 @@ disp('Add or remove pairs and rerun from setup_init. When satisfied continue to 
 
 
 %%
-make_slcs  %This really shouldn't fail.
+make_slcs  
 master_int %This needs to be run before rect_slcs, to determine any offsets of the master relative to SIM
 
 % %remove Bad interferograms?
@@ -75,6 +75,7 @@ unwrap_rlooks %uses interp files now, does snaphu with tiles.
 
 %iterate over this chunk
 invert_dates(0); %1 looks for .unw_topo.unw files (not made til fitramp_int), 0 looks for normal unw files. 
+lf_power
     %%%this generates TS/looks#/date.r4 files and res#.  Res# will have a ramp if not alligned. Choose thresh accordingly
 thresh      =6; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
 edge       = [100 100 10 10*8]; %pixels from left, right, top, bottom edges to mask
@@ -95,6 +96,8 @@ calc_rate_residual %adds "rms" field to ints structure.  can be used to decide w
 rp=[];
 rms_thresh=100 %choose rms cutoff
 rp=[rp;[ints(abs([ints.rms])>rms_thresh).i1; ints(abs([ints.rms])>rms_thresh).i2]']
+
+lf_power(5); %arg: # of freq bands
 
 %Geocode and make .kml file
 geocode('rates_2','geo_rates_2.unw') %Geocodes the rates_4 file and makes geo_rates_2.unw
