@@ -42,14 +42,12 @@ makeGamma(0) %0, 1, 2, or 3
 makeGamma(1)
 make_mask(0.2)
 smart_rlooks_2
-% smart_rlooks_runpar  %buffers could make this faster.  Lots of I/O
-crop_edges([1*4 1*4 1*8 1*8]); %full res location of crop (so that it works for multiple rlooks, left right, top, bottom.
-% ps_interp_runpar
+crop_edges([30*rlooks 30*rlooks 30*alooks 30*alooks]); %full res location of crop (so that it works for multiple rlooks, left right, top, bottom.
 ps_interp
 unwrap_rlooks %uses interp files now, does snaphu with tiles. 
 
 % mask_unwrapped %masks using the gamma_4rlks.r4 file. first band is unmasked, second band is masked
-% unw2png_km1(2,10,15) %(mode,wraprate,scale%) make a .png image of each unw_4lks in TS/looks4/png_files/
+unw2png_km1(10,20) %(mode,wraprate,scale%) make a .png image of each unw_4lks in TS/looks4/png_files/
 % disp('Examine the unwrapped ints and decide if filtering is required.')
 % 
 % return
@@ -75,7 +73,7 @@ unwrap_rlooks %uses interp files now, does snaphu with tiles.
 
 %iterate over this chunk
 invert_dates(0); %1 looks for .unw_topo.unw files (not made til fitramp_int), 0 looks for normal unw files. 
-lf_power
+lf_power(5)
     %%%this generates TS/looks#/date.r4 files and res#.  Res# will have a ramp if not alligned. Choose thresh accordingly
 thresh      =6; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
 edge       = [100 100 10 10*8]; %pixels from left, right, top, bottom edges to mask
