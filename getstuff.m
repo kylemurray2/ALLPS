@@ -13,5 +13,5 @@ end
 % newnx   = 400%floor(nx./rlooks)
 % newny   =400%floor(ny./alooks);
 im=sqrt(-1);
-newnx   = floor(nx./rlooks)
+newnx   = floor(nx./rlooks);
 newny   =floor(ny./alooks);
