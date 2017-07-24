@@ -5,7 +5,7 @@ function fitramp(thresh,edge,waterheight,topoflag,boxedge,degree)%boxedge and ed
 % waterheight = [-10]; %mask all pixels with height < waterheight.
 % topoflag    = [];
 % boxedge     = [0 0 0 0];%[2437 2636 1357 1582]*4;
-% degree=1;
+% degree=0;
 %topoflag can be 0 because no trees.   if topoflag is set, the ramp
 %includes topo
 set_params
@@ -165,10 +165,10 @@ watermask(watermask<waterheight)=NaN;
     
     
     for i=1:nints
-        fid = fopen([ints(i).unwrlk{l}],'r');
-        tmp = fread(fid,[newnx(l),newny(l)*2],'real*4');
+        fid = fopen([ints(i).unwrlk{l} '_orig'],'r');
+        phs = fread(fid,[newnx(l),newny(l)],'real*4');
         fclose(fid);
-        phs   = tmp(:,2:2:end)';
+        phs   = phs';
         zid   = phs==0; %find id of points=0
         %remove rate if exists
         if(userate)
@@ -197,7 +197,7 @@ watermask(watermask<waterheight)=NaN;
         
         res(isnan(watermask))=0;
         res(zid)=0; %this keeps anything set exactly at zero from being "deramped"
-        tmp(:,2:2:end) = res';
+        tmp = res';
         tmp(isnan(tmp))=0;
         %write flatenned unw file to output.
        if(~exist([ints(i).unwrlk{l} '_old']))
