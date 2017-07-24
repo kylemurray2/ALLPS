@@ -73,15 +73,18 @@ unw2png_km1(10,20) %(mode,wraprate,scale%) make a .png image of each unw_4lks in
 
 %iterate over this chunk
 invert_dates(0); %1 looks for .unw_topo.unw files (not made til fitramp_int), 0 looks for normal unw files. 
-lf_power(5)
+
     %%%this generates TS/looks#/date.r4 files and res#.  Res# will have a ramp if not alligned. Choose thresh accordingly
-thresh      =6; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
-edge       = [100 100 10 10*8]; %pixels from left, right, top, bottom edges to mask
+thresh      =2; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
+edge       = [100 100 10 10]; %pixels from left, right, top, bottom edges to mask
 waterheight = [-10]; %mask all pixels with height < waterheight.
 topoflag    = [];
 boxedge     = [0 0 0 0];%[2437 2636 1357 1582]*4;
-fitramp_int(thresh,edge,waterheight,topoflag,boxedge,1);  %topoflag=1 removes topo and writes to *_topo.unw files, 0 is normal. Now uses rates file, if it exists!
+fitramp_int(thresh,edge,waterheight,topoflag,boxedge,0);  %topoflag=1 removes topo and writes to *_topo.unw files, 0 is normal. Now uses rates file, if it exists!
 invert_dates(0);
+geocode_dates;
+gps_reference;
+lf_power(5);
 
 unwrap_flat %this can or can not be used - will reunwrap the now-flatter interferograms. Then iterate as above.
 
