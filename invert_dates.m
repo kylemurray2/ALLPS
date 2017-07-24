@@ -32,7 +32,6 @@ for l=1:length(rlooks)
     for j=1:newny(l)
         tmpdat=zeros(n,newnx(l)); %data for n-nints = zeros
         for i=1:nints
-            
             jnk = fread(fidi(i),newnx(l),'real*4');
             tmpdat(i,1:length(jnk))=jnk;
         end
