@@ -11,13 +11,13 @@ for ii=1:length(dates)
     %Step 1. Create rmg file
     amp_img = unw_in;
     phs_img = unw_in;
-    rmg_out = [froot '_4rlks.unw'];
+    rmg_out = [froot '_' num2str(rlooks) 'rlks_in.unw'];
 
     system(['mag_phs2rmg ' amp_img ' ' phs_img ' ' rmg_out ' ' num2str(newnx)]);
     [nx2,ny2] = load_rscs([oldintdir 'radar_2rlks.hgt'],'WIDTH','FILE_LENGTH');
 
-    aff1=.5;
-    aff2=aff1/pixel_ratio;
+    aff1=1; %.5
+    aff2=.5; %aff1/pixel_ratio;
 
     %Step 2. Create a 2-looks version
         %first, write out a rect_back.in file
@@ -40,6 +40,6 @@ for ii=1:length(dates)
     %we need to copy a rsc file
     system(['cp ' masterdir 'int_????????_????????/????????-????????_2rlks.cor.rsc ' froot '_2rlks.unw.rsc']);
     lookup_file = 'GEO/geomap_2rlks.trans';
-    system(['geocode.pl ' lookup_file ' ' froot '_2rlks.unw ' froot 'geo_2rlks.unw']);
-    system(['look.pl ' froot 'geo_2rlks.unw' 12]);
+    system(['geocode.pl ' lookup_file ' ' froot '_2rlks.unw ' froot '_geo_2rlks.unw']);
+%     system(['look.pl ' froot '_geo_2rlks.unw' 12]);
 end
