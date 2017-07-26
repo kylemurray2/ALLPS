@@ -73,7 +73,7 @@ for jj=1:length(lat_pt)
     vert_disp = ts_phs(:,jj)/cosd(25);
     
     %get the GPS site
-    [gps_year, gps_v]=readGPS_TS(site_name{jj},2); %outputs in cm
+    [gps_year,~,~, gps_v]=readGPS_TS(site_name{jj},2); %outputs in cm
     
     %get rid of offset in gps data
     % CRCN
@@ -108,6 +108,6 @@ for jj=1:length(lat_pt)
     set(gca,'Ydir','normal')
     axis image
     kylestyle
-    saveas(gcf,['TS_GPS_' site_name{jj}],'epsc')
+    saveas(gcf,['TS_GPS_' site_name{jj}],'svg')
 end
 
