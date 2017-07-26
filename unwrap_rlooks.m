@@ -20,7 +20,7 @@ write_snaphu_conf(ntilerow,ntilecol,nproc); % Uses parallel processing and tiles
 for k=1:nints
     if(~exist([ints(k).unwrlk{1} '_orig'],'file'))
         if(exist([ints(k).unwrlk{1}],'file'))
-            movefile([ints(k).unwrlk{1}],[ints(k).unwrlk{1} '_orig'])
+            copyfile([ints(k).unwrlk{1}],[ints(k).unwrlk{1} '_orig'])
             disp(['moving ' ints(k).unwrlk{1} ' to ' ints(k).unwrlk{1} '_orig']);
         end
     end
