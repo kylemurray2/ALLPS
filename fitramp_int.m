@@ -15,7 +15,6 @@ if topoflag==1
     degree=2;
     disp('Using quadratic because topoflag is set')
 end
-ndates    = length(dates);
 nints     = length(ints);
 oldintdir = [masterdir 'int_' dates(ints(intid).i1).name '_' dates(ints(intid).i2).name '/'];
 
@@ -24,7 +23,7 @@ if strcmp(sat,'S1A')
     ny=ints(id).length;
 else
     [nx,ny]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH');
-
+    
 end
 
 newnx            = floor(nx./rlooks)
@@ -39,13 +38,13 @@ end
 if(isempty(boxedge))
     boxedge=[0 0 0 0];
 end
- if strcmp(sat,'S1A')==0  
+if strcmp(sat,'S1A')==0
     fullresheightfile=[oldintdir 'radar.hgt'];
     if(~exist(fullresheightfile))
         disp(['full res height file should exist: ' fullresheightfile])
         return
     end
- end
+end
 
 
 for l=1:length(rlooks)
@@ -64,44 +63,44 @@ for l=1:length(rlooks)
     [X,Y]=meshgrid(1:newnx(l),1:newny(l));
     
     
-%mask out ocean
-if ~strcmp(sat,'S1A')   
-    oldintdir = [masterdir 'int_' dates(ints(intid).i1).name '_' dates(ints(intid).i2).name '/'];
-            lookheightfile=[oldintdir 'radar_' num2str(rlooks(1)) 'rlks.hgt'];
-
-                if(~exist(lookheightfile))
-                    %----------------------------------------------------------
-                    %KM Edit: There is no rsc file for the look.pl command (looking for
-                    %radar.hgt.rsc)
-                    command1=['cp ' oldintdir 'reference.hgt.rsc ' oldintdir 'radar.hgt.rsc'];
-                    mysys(command1);
-                    %----------------------------------------------------------
-                    command=['look.pl ' fullresheightfile ' ' num2str(rlooks(l)) ' ' num2str(rlooks(l)*pixel_ratio)];
-                    mysys(command);
-                end
-
+    %mask out ocean
+    if ~strcmp(sat,'S1A')
+        oldintdir = [masterdir 'int_' dates(ints(intid).i1).name '_' dates(ints(intid).i2).name '/'];
+        lookheightfile=[oldintdir 'radar_' num2str(rlooks(1)) 'rlks.hgt'];
+        
+        if(~exist(lookheightfile))
+            %----------------------------------------------------------
+            %KM Edit: There is no rsc file for the look.pl command (looking for
+            %radar.hgt.rsc)
+            command1=['cp ' oldintdir 'reference.hgt.rsc ' oldintdir 'radar.hgt.rsc'];
+            mysys(command1);
+            %----------------------------------------------------------
+            command=['look.pl ' fullresheightfile ' ' num2str(rlooks(l)) ' ' num2str(rlooks(l)*pixel_ratio)];
+            mysys(command);
+        end
+        
         fiddem  = fopen(lookheightfile,'r');
         tmp     = fread(fiddem,[newnx,newny*2],'real*4');
         dem     = tmp(:,2:2:end)';
         fclose(fiddem);
-%         watermask=watermask';
-    
-else
-    mysys(['looks.py -i '  masterdir 'int_' ints(id).name '/merged/z.rdr.full -o '  masterdir 'int_' ints(id).name '/merged/z.rdr -r ' num2str(rlooks) ' -a ' num2str(rlooks*pixel_ratio) ])
-    fiddem = fopen([masterdir 'int_' ints(id).name '/merged/z.rdr'],'r');
+        %         watermask=watermask';
+        
+    else
+        mysys(['looks.py -i '  masterdir 'int_' ints(id).name '/merged/z.rdr.full -o '  masterdir 'int_' ints(id).name '/merged/z.rdr -r ' num2str(rlooks) ' -a ' num2str(rlooks*pixel_ratio) ])
+        fiddem = fopen([masterdir 'int_' ints(id).name '/merged/z.rdr'],'r');
         tmp     = fread(fiddem,[newnx,newny],'real*8');
-        dem     =tmp'; 
-    fclose(fiddem);
-    watermask = dem;  
-    watermask(watermask<waterheight)=NaN;
-    mask = isfinite(watermask);
-end
-%     figure;subplot(1,3,1);imagesc(mask);title('mask')
- 
-%     fiddem  = fopen(lookheightfile,'r','native');
-%     tmp     = fread(fiddem,[newnx,newny*2],'real*4');
-%     dem     = tmp(:,2:2:end)';
-%     fclose(fiddem);
+        dem     =tmp';
+        fclose(fiddem);
+        watermask = dem;
+        watermask(watermask<waterheight)=NaN;
+        mask = isfinite(watermask);
+    end
+    %     figure;subplot(1,3,1);imagesc(mask);title('mask')
+    
+    %     fiddem  = fopen(lookheightfile,'r','native');
+    %     tmp     = fread(fiddem,[newnx,newny*2],'real*4');
+    %     dem     = tmp(:,2:2:end)';
+    %     fclose(fiddem);
     
     fidmask = fopen(['res_' num2str(rlooks(l))],'r');
     tmp     = fread(fidmask,[newnx(l),newny(l)],'real*4');
@@ -126,20 +125,20 @@ end
     id3=ceil(boxedge(3)/alooks(l));
     id4=floor(boxedge(4)/alooks(l));
     
-%     boxmask = ones(size(stdmask));
-%     boxmask(:,1:id1)=NaN; %mask left
-%     boxmask(:,id2:end)=NaN; %mask right
-%     boxmask(1:1+id3,:)=NaN; %mask top
-%     boxmask(id4:end,:)=NaN; %mask bottom
+    %     boxmask = ones(size(stdmask));
+    %     boxmask(:,1:id1)=NaN; %mask left
+    %     boxmask(:,id2:end)=NaN; %mask right
+    %     boxmask(1:1+id3,:)=NaN; %mask top
+    %     boxmask(id4:end,:)=NaN; %mask bottom
     
-%     boxmask=isnan(boxmask); %reverse sense of boxmask
-
-% watermask=double(watermask);
-% watermask(watermask==0)=NaN;
-
-watermask=dem;
-watermask(watermask<waterheight)=NaN;
-%add all together
+    %     boxmask=isnan(boxmask); %reverse sense of boxmask
+    
+    % watermask=double(watermask);
+    % watermask(watermask==0)=NaN;
+    
+    watermask=dem;
+    watermask(watermask<waterheight)=NaN;
+    %add all together
     mask = isfinite(stdmask+edgemask);%+watermask);%+boxmask);
     disp([sum(isfinite(stdmask(:))) sum(isfinite(edgemask(:))) sum(isfinite(watermask(:))) ]);%sum(isfinite(boxmask(:)))])
     disp([num2str(sum(mask(:))/newnx(l)/newny(l)*100) '% points left after masking'])
@@ -186,7 +185,7 @@ watermask(watermask<waterheight)=NaN;
             case 2 %quadratic
                 synth = mod(1)+mod(2)*X+mod(3)*Y+mod(4)*X.*Y+mod(5)*X.^2+mod(6)*Y.^2;
         end
-               
+        
         if(topoflag)
             synth = synth+mod(7)*dem;
         end
@@ -199,20 +198,22 @@ watermask(watermask<waterheight)=NaN;
         res(zid)=0; %this keeps anything set exactly at zero from being "deramped"
         tmp = res';
         tmp(isnan(tmp))=0;
-        %write flatenned unw file to output.
-       if(~exist([ints(i).unwrlk{l} '_old']))
-          movefile(ints(i).unwrlk{l},[ints(i).unwrlk{l} '_old']);
-       end
         
-        %move the _old files back
-%         for i=1:nints
-%         movefile([ints(i).unwrlk{l} '_old'],[ints(i).unwrlk{l}]);    
+        
+%         %write flatenned unw file to output.
+%         if(~exist([ints(i).unwrlk{l} '_old'],'file'))
+%             movefile(ints(i).unwrlk{l},[ints(i).unwrlk{l} '_old']);
 %         end
-%         
+        
+        %move the _orig files back
+%                 for i=1:nints
+%                 movefile([ints(i).unwrlk{l} '_orig'],[ints(i).unwrlk{l}]);
+%                 end
+        %
         if(topoflag)
             outfile=[ints(i).unwrlk{l} '_topo.unw'];
         else
-             outfile=ints(i).unwrlk{l};
+            outfile=ints(i).unwrlk{l};
         end
         fid=fopen(outfile,'w');
         fwrite(fid,tmp,'real*4');
@@ -221,7 +222,7 @@ watermask(watermask<waterheight)=NaN;
     end
 end
 
-%plot the original, ramp, and removed 
+%plot the original, ramp, and removed
 figure
 subplot(1,3,1)
 imagesc(phs);title('example original interferogram');colorbar;axis image
