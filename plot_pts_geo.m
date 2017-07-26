@@ -114,6 +114,6 @@ for ii=1:ndates
   ylabel('Displacement (cm)')
   xlabel('Distance along profile (pixels)')
   kylestyle
-  saveas(gcf,'TS_profiles','epsc')
+  saveas(gcf,'TS_profiles','svg')
 end
 
