@@ -20,8 +20,10 @@ switch sat
         bp_thresh = 1500;                                                                                                            
         [i1,i2]=find(and(and(deltadn>0,deltadn<dn_thresh),abs(deltabp)<bp_thresh));                                                  
 end                                                                                                                                  
-                                                                                                                                     
-                                                                                                                                
+
+
+
+                                                                                                                              
 % %sort so that first int has master date
 % tmpid=find(i1==id);
 % if(~isempty(tmpid))
@@ -114,3 +116,33 @@ end
 save(ts_paramfile,'dates','ints');
 [G,Gg,R,N]=build_Gint;
 
+% Finds a good interferogram pair to make the primary interferogram, and
+% makes the first date of that pair the primary date. 
+intid_o=intid;
+id_o=id;
+dn_thresh = 300;                                                                                                             
+bp_thresh = 200; 
+bp_l = 50;
+[mi1, mi2] = find(and(and(deltadn>0,deltadn<dn_thresh),and(abs(deltabp)>100, abs(deltabp)<bp_thresh)));
+id=mi1(1);
+intid = find([ints(:).i1]==mi1(1) & [ints(:).i2]==mi1(2));
+
+disp(['Making ' ints(intid).name ' the primary interferogram.']);
+disp([num2str(ints(intid).i1) ' and ' num2str(ints(intid).i2)]);
+disp(['Making ' dates(id).name ' the primary date/']);
+
+% Write the new ids to set_params
+file=[masterdir 'set_params.m'];
+fid=fopen(file,'a+');
+fprintf(fid,['id = ' num2str(id) ' ;\n']);
+fprintf(fid,['intid = ' num2str(intid) ' ;\n']);
+
+
+%check if ids changed
+if(intid~=intid_o & id~=id_o)
+    disp('ids have changed.  Rerunning from setup_init')
+    setup_init
+    choose_ints_km
+else
+    disp('ids have not changed. Continue to make_slcs')
+end
