@@ -2,10 +2,11 @@
 % clear all;close all
 % px=[727 460  541 1328 251];
 % py=[550 1491 79 2337 2897];
+clear all;close all
 sites=[{'main'}; {'P544'}; {'CRCN'}; {'BAK1'}; {'P537'}]
-px=465;
-py=54;
-
+% px=1553;
+% py=1248;
+px=1673;py=4876;
 %example:
 %px=[1076 1015 1135 693 637 699 722];
 %py=[1655 1504 1498 2069 1980 2065 2152];
@@ -29,13 +30,14 @@ newny   = floor(ny./alooks);
 dn    = [dates.dn];
 dn    = dn-dn(1);
 
-l=1;%4 rlooks, here
+l=1;
+
 for i=1:ndates
     fid=fopen(dates(i).unwrlk{l},'r');
     for j=1:length(px)
         fseek(fid,0,-1);
         tmp=fread(fid,(newnx(l)*(py(j)-1)+px(j)-1),'real*4');
-        values(i,j)=fread(fid,1,'real*4')/-2;
+        ts_phs(i,j)=fread(fid,1,'real*4')*lambda/(4*pi)*-100; %convert to cm
         
     end
     fclose(fid);
@@ -127,7 +129,7 @@ fid=fopen(['rates_' num2str(rlooks)],'r');
 rate=fread(fid,[newnx,newny*2],'real*4');
 % rate=flipud(rate');
 figure
-imagesc((fliplr(rate')));hold on
+imagesc(rate');hold on
 plot(px,py,'ko')
 % text(px,py,sites)
 % caxis([-40 40])
@@ -140,20 +142,20 @@ for i=1:length(dates)
     dnum(i) = str2num(datenumbers(i,:));
 end
 %project to vertical
-values = values/cosd(34);
+ts_phs = ts_phs/cosd(25);
 d=datenum(datenumbers,'yyyymmdd');
 dy=d./365.25;
-figure
-plot(dy,values,'k.-')
-datetick('x','keepticks','keeplimits')
-title(['at pixel: ' num2str(px) ', ' num2str(py) ])
-kylestyle
+% figure
+% plot(dy,values,'k.-')
+% datetick('x','keepticks','keeplimits')
+% title(['at pixel: ' num2str(px) ', ' num2str(py) ])
+% kylestyle
 
 %get the GPS site
- [gps_year, gps_e, gps_n, gps_v]=readGPS_TS('CRCN',1);
+%  [gps_year, gps_e, gps_n, gps_v]=readGPS_TS('CRCN',1);
 
 %get rid of offset in gps data
-gps_v(1932:end) = gps_v(1932:end) + (-gps_v(1932)+gps_v(1930));
+% gps_v(1932:end) = gps_v(1932:end) + (-gps_v(1932)+gps_v(1930));
  
 % start_id = find(round((gps_year*1000))/1000 == round((dy(1)*1000))/1000);
 % insar_vert=nan(1,length(gps_year));
@@ -164,17 +166,17 @@ gps_v(1932:end) = gps_v(1932:end) + (-gps_v(1932)+gps_v(1930));
 % load 's1a_dates'
 % load 's1a_disp'
 
-figure
-plot(dy,10*values,'r^');hold on
-legend('GPS','Envisat','Sentinel')
-xlabel('years')
-ylabel('Displacement (cm)')
+% figure
+% plot(dy,values,'r.');hold on
+% % legend('GPS','Envisat','Sentinel')
+% xlabel('years')
+% ylabel('Displacement (cm)')
+% kylestyle
 
-gps_v=(gps_v); %multiply meters by 100 to get cm
-gps_v=gps_v - mean(gps_v(1:20))-28; %subtract mean of some of the values near first insar data points (choose range manually)
-plot(gps_year,gps_v,'.')
-
-kylestyle
+% gps_v=(gps_v); %multiply meters by 100 to get cm
+% gps_v=gps_v - mean(gps_v(1:20))-28; %subtract mean of some of the values near first insar data points (choose range manually)
+% plot(gps_year,gps_v,'.')
+% kylestyle
 
 %% now fit a seasonal rate
 run_seasfun

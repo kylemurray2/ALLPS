@@ -45,7 +45,7 @@ ps_interp
 unwrap_rlooks %uses interp files now, does snaphu with tiles.
 
 % mask_unwrapped %masks using the gamma_4rlks.r4 file. first band is unmasked, second band is masked
-% unw2png_km1(2,10,15) %(mode,wraprate,scale%) make a .png image of each unw_4lks in TS/looks4/png_files/
+unw2png_km1(10,20) %(mode,wraprate,scale%) make a .png image of each unw_4lks in TS/looks4/png_files/
 % disp('Examine the unwrapped ints and decide if filtering is required.')
 %
 % return
@@ -78,9 +78,18 @@ edge       = [100 100 10 10*8]; %pixels from left, right, top, bottom edges to m
 waterheight = [-10]; %mask all pixels with height < waterheight.
 topoflag    = [];
 boxedge     = [0 0 0 0];%[2437 2636 1357 1582]*4;
-fitramp_int(thresh,edge,waterheight,topoflag,boxedge,1);  %topoflag=1 removes topo and writes to *_topo.unw files, 0 is normal. Now uses rates file, if it exists!
+fitramp_int(thresh,edge,waterheight,topoflag,boxedge,2);  %topoflag=1 removes topo and writes to *_topo.unw files, 0 is normal. Now uses rates file, if it exists!
+tic
 invert_dates(0);
+geocode_dates;
+gps_reference;
 
+lf_power(2);
+invert_rates
+geocode('rates_2','geo_rates_2.unw') %Geocodes the rates_4 file and makes geo_rates_2.unw
+geocode('ratestd_2','geo_std_2.unw') %Geocodes the rates_4 file and makes geo_rates_2.unw
+plot_std_profile
+toc
 unwrap_flat %this can or can not be used - will reunwrap the now-flatter interferograms. Then iterate as above.
 
 %%
@@ -97,6 +106,8 @@ lf_power(5); %arg: # of freq bands
 
 %Geocode and make .kml file
 geocode('rates_2','geo_rates_2.unw') %Geocodes the rates_4 file and makes geo_rates_2.unw
+geocode('ratestd_2','geo_rates_2.unw') %Geocodes the rates_4 file and makes geo_rates_2.unw
+plot_std_profile
 unw2png_km('geo_rates_2.unw',[sat '_T' num2str(track) '_' num2str(frame) '.png'],2,10,50) %infile, outfile, mode(1 is amp, 2 is phs),wraprate,scale(% resize)
 make_frame_gmt
 

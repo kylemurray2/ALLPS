@@ -1,24 +1,7 @@
-set_params
-load(ts_paramfile);
-if exist('watermask','file')
-load('watermask');
-end
-ndates         = length(dates);
-nints          = length(ints);
-if strcmp(sat,'S1A')
-    nx=ints(id).width;
-    ny=ints(id).length;
-else
-     [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
-end
-newnx   = floor(nx./rlooks)
-newny   = floor(ny./alooks);
 
-% if exist('TS/looks4/4rlks.rsc')
-% [newnx,newny,lambda] = load_rscs('TS/looks4/4rlks','WIDTH','FILE_LENGTH','WAVELENGTH');
-% end
+clear all;close all
+getstuff
 
-% [X,Y] = meshgrid(1:newnx,1:newny);
 
 dn    = [dates.dn];
 dn    = dn-dn(1);

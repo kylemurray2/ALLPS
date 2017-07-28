@@ -35,6 +35,8 @@ low_freq_power = reshape(ss,[newny,newnx]); %
 
 % Plot resulting LF power image and write to file
 figure;imagesc(low_freq_power);colorbar;caxis([0 40])
+    saveas(gcf,['lf_power_raw'],'svg')
+
 fido=fopen(['lowFreqPower' num2str(rlooks(l))],'w');
 fwrite(fido,low_freq_power,'real*4');fclose(fido);
 save('lf_power','low_freq_power');
