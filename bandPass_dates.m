@@ -1,7 +1,7 @@
 %bandpass image filter
 function bandPass_dates(fstrength)
 getstuff
-% fstrength=3;
+% fstrength=1;
 for ii=1:nints
     % Specify inputs and outputs
     % maskfile = maskfilerlk{1};
@@ -48,7 +48,7 @@ for ii=1:nints
     [X,Y] = meshgrid(1-xoff:newnx-xoff,1-yoff:newny-yoff);
     
     g1=5;%fstrength1^1.5;
-    gauss1 = 0;%exp((-X.^2-Y.^2)/g1^2);
+    gauss1 = exp((-X.^2-Y.^2)/g1^2);
     g2=g1+(2+fstrength^1.4);
     gauss2 = exp((-X.^2-Y.^2)/(g2^2));
     gauss3 = gauss2-gauss1;

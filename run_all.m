@@ -86,7 +86,6 @@ invert_dates(0);
 geocode_dates;
 gps_reference;
 
-
 lf_power(2);
 invert_rates
 geocode('rates_2','geo_rates_2.unw') %Geocodes the rates_4 file and makes geo_rates_2.unw
