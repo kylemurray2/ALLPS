@@ -100,3 +100,33 @@ else
     save(ts_paramfile,'dates');
 end
 
+
+
+
+
+
+
+
+
+
+% %************************************************************************
+%Make sure the rect file is not 0 size.  If it is, then this will delete
+%all associated files.
+%             for i=[2:id-1 id+1:ndates]
+%                 s=dir([rectdir 'rect_' dates(i).name '.slc']);
+%                 if size(s)==[0 1]
+%                     s(1).bytes=1;
+%                 end
+%                 filesize=s.bytes;
+%                 if filesize < 1e9 %if less than 1Gb
+%                     system(['rm ' rectdir '*' dates(i).name '*']);
+%                     system(['rm ' rectdir 'rectfiles/*' dates(i).name '*']);
+%                     removed(i)=dates(i).name;
+%                     display([dates(i).name ' was bad and deleted.Find offsets manually and/or increase window size. Then rerun this script'])
+%                 end
+%             end
+% %************************************************************************
+% 
+
+
+
