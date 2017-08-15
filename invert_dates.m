@@ -1,7 +1,8 @@
 function invert_dates(topoflag)
 % topoflag=0;
 %0 looks for unwrlk{l}, 1 adds _topo.unw to name.
-getstuff
+set_params
+load(ts_paramfile)
 [G,Gg,R,N]=build_Gint;
 [m,n]=size(Gg);
 

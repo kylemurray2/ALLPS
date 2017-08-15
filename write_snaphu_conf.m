@@ -3,8 +3,8 @@ function write_snaphu_conf(ntilerow,ntilecol,nproc)
 % ntilecol: how many tiles cols
 % nproc: how many processors to split the tile processes on (Mongoose has
 % 40 cores, and packrat has 32
-
-getstuff
+set_params
+load(ts_paramfile)
 for ii=1:nints
     
     conf =[ints(ii).unwrlk{1} '_snaphu.conf'];

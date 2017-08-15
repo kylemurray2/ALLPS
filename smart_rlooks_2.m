@@ -1,4 +1,5 @@
-getstuff
+set_params
+load(ts_paramfile)
 
 win=ones(alooks,rlooks);
 win=win/sum(win(:));
