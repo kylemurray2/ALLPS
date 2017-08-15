@@ -13,6 +13,7 @@ ntilerow=20;
 ntilecol=19;
 nproc=38;
 
+
 % Write snaphu configuration files
 write_snaphu_conf(ntilerow,ntilecol,nproc); % Uses parallel processing and tiles
 
@@ -30,11 +31,13 @@ end
 for k=1:nints
     if(~exist([ints(k).unwrlk{1}],'file'))
         disp(['unwrapping ' ints(k).flatrlk{1}]);
+
         system(['snaphu -f ' ints(k).unwrlk{1} '_snaphu.conf >> tmp_log']);
     else
         disp('unw files already exist. Unwrapping ints and writing over it. Modify write_snaphu_conf() to reunwrap .unw files.')
         disp(['unwrapping ' ints(k).flatrlk{1}]);
         system(['snaphu -f ' ints(k).unwrlk{1} '_snaphu.conf >> tmp_log']);
+
     end
 end
 

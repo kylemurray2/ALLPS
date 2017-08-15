@@ -14,11 +14,11 @@ switch sat
 end
 parfor ii=1:length(dn)
     tic
-    %     if ~exist(dates(i).raw,'file')
+        if ~exist(dates(i).raw,'file')
     parraw(ii,sat,searchresults,dn,sortdn,uname,passw)
-    %     else
-    %         disp(['already raw'])
-    %     end
+        else
+            disp(['already raw'])
+        end
     toc
 end
 clear badid c
