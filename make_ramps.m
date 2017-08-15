@@ -5,8 +5,8 @@ oldintdir = [masterdir 'int_' dates(ints(intid).i1).name '_' dates(ints(intid).i
 diff_file = [oldintdir 'diffnsim_flat_HDR_'  dates(ints(intid).i1).name '-' dates(ints(intid).i2).name '.int.in'];
 
 [nx,ny]=load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH');
-mysys(['ln -s ' oldintdir dates(ints(intid).i1).name '-' dates(ints(intid).i2).name '.int ./' dates(ints(intid).i1).name '_' dates(ints(intid).i2).name ' .int']);
-mysys(['ln -s ' oldintdir dates(ints(intid).i1).name '-' dates(ints(intid).i2).name '.int.rsc ./' dates(ints(intid).i1).name '_' dates(ints(intid).i2).name ' .int.rsc']);
+mysys(['ln -s ' oldintdir dates(ints(intid).i1).name '-' dates(ints(intid).i2).name '.int ' intdir dates(ints(intid).i1).name '_' dates(ints(intid).i2).name '.int']);
+mysys(['ln -s ' oldintdir dates(ints(intid).i1).name '-' dates(ints(intid).i2).name '.int.rsc ' intdir dates(ints(intid).i1).name '_' dates(ints(intid).i2).name '.int.rsc']);
 
 for i=[1:id-1 id+1:ndates]
     rampname=[intdir 'ramp_' dates(i).name '.unw'];

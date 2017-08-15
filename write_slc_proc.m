@@ -1,4 +1,5 @@
-shifts=50;
+shifts=0;
+patches=0; % if set to 1, only does 1 patch (for testing)
 set_params
 load(ts_paramfile)
 ndates=length(dates);
@@ -37,23 +38,19 @@ for i=1:ndates
         
         
         fid=fopen([dates(i).dir dates(i).name '.proc'],'w');
-        if(i==id) %master date - > if this is zero, process_2pass sets it to the default values, + half aperture
-            fprintf(fid,'before_z_ext = %d\n',before_z_ext);
-            fprintf(fid,'after_z_ext = %d\n',after_z_ext);
-            fprintf(fid,'near_rng_ext = %d\n',near_rng_ext);
-            fprintf(fid,'far_rng_ext = %d\n',far_rng_ext);
-            %fprintf(fid,'number_of_patches = 2\n');
-        else
-            fprintf(fid,'before_z_ext = %d\n',before_z_ext-azoff+shifts);
-            fprintf(fid,'after_z_ext = %d\n',after_z_ext+azoff+shifts);
-            fprintf(fid,'near_rng_ext = %d\n',near_rng_ext-rgoff+shifts);
-            fprintf(fid,'far_rng_ext = %d\n',far_rng_ext+rgoff+shifts);
-            %fprintf(fid,'number_of_patches = 2\n');
+        
+        fprintf(fid,'before_z_ext = %d\n',before_z_ext-azoff+shifts);
+        fprintf(fid,'after_z_ext = %d\n',after_z_ext+azoff+shifts);
+        fprintf(fid,'near_rng_ext = %d\n',near_rng_ext-rgoff+shifts);
+        fprintf(fid,'far_rng_ext = %d\n',far_rng_ext+rgoff+shifts);
+        if(patches)
+            fprintf(fid,'number_of_patches = 1\n');
         end
+
         fclose(fid);
         
     else
-        disp([dateprocfile ' already made, not changing.  Shifts = ' num2str(rgoff) ' ' num2str(azoff)]);
+        disp([dateprocfile ' already made, not changing.  Shifts = ' num2str(rgoff) ' rg ' num2str(azoff) ' az']);
     end
 end
 

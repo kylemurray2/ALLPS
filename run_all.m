@@ -1,8 +1,8 @@
 %id: master date id.  Change based on plot from search_data or your own intuition.
 clear all;close all
-track=163;
-frame=711;
-sat='ENVI';
+track=218;
+frame=700;
+sat='ALOS';
 plotflag=1;
 id=1;
 mkdir('figs')
@@ -14,9 +14,17 @@ write_paramfile(sat,masterdir,id,footprints,1,2,track,frame); %writes set_params
 init_dirs;                                %initializes timeseries directories
 make_dates_struct(sortdn,sortresults);    %makes dates structure, stores in ts_params.mat
 load_data;   %After: Check to see if each dir now has data files
-disp('Raw files have been created. Now start at setup_init.')
 setup_init
-read_dopbase_km %selects dates that don't violate doppler, baseline, az off
+% read_dopbase_km %selects dates that don't violate doppler, baseline, az off
+read_dopbase
+ %new
+ write_slc_proc
+ %do 2 times more
+ setup_init
+ read_dopbase
+ 
+
+
 choose_ints_km  %chooses set of interferograms, add or remove pairs by editing set_params.m
 
 % note: check azoff

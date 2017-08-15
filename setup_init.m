@@ -6,6 +6,7 @@ roifile       = [dates(1).dir dates(1).name '_roi.in'];
 if(exist(roifile,'file'))
     delete(roifile);
 end
+
 for i=[1:id-1 id+1:ndates] %make all relative to date "id"
     %check if raw exists
     infile=[dates(i).name '/' dates(i).name '.raw'];
@@ -26,31 +27,11 @@ for i=[1:id-1 id+1:ndates] %make all relative to date "id"
         fprintf(fid,'\n');
         
         fclose(fid);
-        switch sat
-            case 'TSX'
-                command=('process_2pass.pl tmp.proc roi_prep orbbase');
-            otherwise
-                command=('process_2pass.pl tmp.proc raw orbbase');
-        end
-        [status(i), result]=mysys(command);
+        command=('process_2pass.pl tmp.proc raw orbbase');
+        [status(i), result]=mysys(command); 
     end
 end
-
 delete('tmp.proc');
 
-for i=1:ndates
-    [height,height_ds,height_dds] = load_rscs(dates(i).slc,'HEIGHT','HEIGHT_DS','HEIGHT_DDS');
-    dates(i).sl_az_res            = load_rscs([dates(i).dir '/roi.dop'],'SL_AZIMUT_RESOL');
-    dates(i).vel                  = load_rscs(dates(i).slc,'VELOCITY');
-    dates(i).squint               = load_rscs(dates(i).raw,'SQUINT');
-    if(ischar(dates(i).squint))
-        dates(i).squint=str2num(dates(i).squint);
-    end
-    
-    dates(i).hgtvec               = [height,height_ds,height_dds];
-    dates(i).startrange           = load_rscs(dates(i).slc,'STARTING_RANGE');
-end
-
-save(ts_paramfile,'dates');
 
 
