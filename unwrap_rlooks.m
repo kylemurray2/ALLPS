@@ -6,7 +6,8 @@
 %<^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^
 
 clear all;close all
-getstuff
+set_params
+load(ts_paramfile)
 
 % Specify snaphu options
 ntilerow=20;

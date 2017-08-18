@@ -1,31 +1,30 @@
 %id: master date id.  Change based on plot from search_data or your own intuition.
 clear all;close all
-track=218;
-frame=700;
-sat='ALOS';
+track=163;
+frame=729;
+sat='ENVI';
 plotflag=1;
 id=1;
 mkdir('figs')
 masterdir = [pwd '/'];%['/data/kdm95/' sat '/' num2str(track) '_' num2str(frame) '/']; %For now, set this by hand, make sure it exists, and run from this dir.
 
+
+
 [dn,footprints,searchresults,sortresults,sortdn,apiCall]=search_data(track,frame,sat,1,[]);
 %  [dn,searchresults,sortdn,sortresults]=I_subset([50:56],dn,searchresults,sortdn,sortresults); %do only these date ids
-write_paramfile(sat,masterdir,id,footprints,1,2,track,frame); %writes set_params.m, which you can edit.
+write_paramfile(sat,masterdir,id,footprints,1,pixel_ratio,rlk,track,frame); % (sat,masterdir,id,footprints,plotflag,pixel_ratio,track,frame)
 init_dirs;                                %initializes timeseries directories
 make_dates_struct(sortdn,sortresults);    %makes dates structure, stores in ts_params.mat
 load_data;   %After: Check to see if each dir now has data files
 setup_init
 % read_dopbase_km %selects dates that don't violate doppler, baseline, az off
 read_dopbase
- %new
+%new
  write_slc_proc
- %do 2 times more
+%do 2 times more
  setup_init
  read_dopbase
- 
-
-
-choose_ints_km  %chooses set of interferograms, add or remove pairs by editing set_params.m
+ choose_ints_km  %chooses set of interferograms, add or remove pairs by editing set_params.m
 
 % note: check azoff
 
