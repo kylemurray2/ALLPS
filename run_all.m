@@ -45,7 +45,7 @@ make_ramps
 flat_ints
 makeGamma(0) %0, 1, 2, or 3
 makeGamma(1)
-make_mask(0.2)
+make_mask(.3)
 smart_rlooks_2
 crop_edges([30*rlooks 30*rlooks 30*alooks 30*alooks]); %full res location of crop (so that it works for multiple rlooks, left right, top, bottom.
 ps_interp
@@ -78,14 +78,13 @@ unw2png_km1(10,20) %(mode,wraprate,scale%) make a .png image of each unw_4lks in
 
 %iterate over this chunk
 invert_dates(0); %1 looks for .unw_topo.unw files (not made til fitramp_int), 0 looks for normal unw files.
-lf_power
 %%%this generates TS/looks#/date.r4 files and res#.  Res# will have a ramp if not alligned. Choose thresh accordingly
-thresh      =6; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
+thresh      =1; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
 edge       = [100 100 10 10*8]; %pixels from left, right, top, bottom edges to mask
 waterheight = [-10]; %mask all pixels with height < waterheight.
 topoflag    = [];
 boxedge     = [0 0 0 0];%[2437 2636 1357 1582]*4;
-fitramp_int(thresh,edge,waterheight,topoflag,boxedge,2);  %topoflag=1 removes topo and writes to *_topo.unw files, 0 is normal. Now uses rates file, if it exists!
+fitramp_date(thresh,edge,waterheight,topoflag,boxedge,0);  %topoflag=1 removes topo and writes to *_topo.unw files, 0 is normal. Now uses rates file, if it exists!
 tic
 invert_dates(0);
 geocode_dates;

@@ -21,7 +21,7 @@ msk=fread(fid,[newnx,newny],'real*4');
 fclose(fid);
 
 
-parfor ii=1:nints
+parfor ii=13%:nints
 %     if(~exist([ints(ii).flatrlk{1} '_bell']))
         par_ps_interp(ii,msk,gamma,alpha,rx,ry)
 %     end
