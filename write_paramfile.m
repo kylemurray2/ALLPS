@@ -1,4 +1,4 @@
-function write_paramfile(sat,masterdir,id,footprints,plotflag,pixel_ratio,track,frame)
+function write_paramfile(sat,masterdir,id,footprints,plotflag,pixel_ratio,rlk,track,frame)
 
 file=[masterdir 'set_params.m'];
 
@@ -66,7 +66,7 @@ fprintf(fid,'dopcutoff=400;\n');
 fprintf(fid,'azcutoff=8000;\n\n');
 
 
-fprintf(fid,'rlooks      = [2]; %%can be larger vector\n');
+fprintf(fid,['rlooks      = ' num2str(rlk) ';\n']);
 fprintf(fid,['pixel_ratio = ' num2str(pixel_ratio) ';\n']);
 fprintf(fid,'alooks      = rlooks*pixel_ratio;\n');
 
