@@ -4,20 +4,24 @@ win=ones(alooks,rlooks);
 win=win/sum(win(:));
 rangevec=[0:newnx-1]*rlooks+1;
 
-fid1    = fopen(gammafile,'r');
-gamm=fread(fid1,[ny,nx],'real*4');
-fclose(fid1);
+% fid1    = fopen(gammafile,'r');
+% gamm=fread(fid2,[nx,ny],'real*4');
+% gamm=gamm';
+% fclose(fid1);
 
 for l=1:length(rlooks)
     parfor k=1:nints
-        if(~exist(ints(k).flatrlk{l},'file'));
+%         if(~exist(ints(k).flatrlk{l},'file'));
+fid1    = fopen(gammafile,'r');
+
             fid2    = fopen(ints(k).flat,'r');
             fid3    = fopen(ints(k).flatrlk{l},'w');
             fid4    = fopen([ints(k).flatrlk{l} '.cor'],'w');
             for j=1:newny(l)
                 mask = zeros(alooks(l),nx);
                 int  = zeros(alooks(l),nx);
-                gam  = gamm(j,:);
+%                 gam  = gamm(j,:);
+                gam=fread(fid1,nx,'real*4');
                 for i=1:alooks(l)
                     if(length(gam)==nx)
                         mask(i,:)=gam(1:nx);
@@ -56,8 +60,8 @@ for l=1:length(rlooks)
             fclose(fid2);
             fclose(fid3);
             fclose(fid4);
-        else
-            disp([ints(k).flatrlk{l} ' already done']);
-        end
+%         else
+%             disp([ints(k).flatrlk{l} ' already done']);
+%         end
     end 
 end
