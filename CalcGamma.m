@@ -1,4 +1,6 @@
-getstuff
+set_params
+load(ts_paramfile)
+
 for i=1:nints
     filename    = [ints(i).flat '_diff'];
     fid(i)      = fopen(filename,'r','native');

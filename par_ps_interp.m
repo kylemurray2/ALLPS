@@ -1,5 +1,6 @@
 function par_ps_interp(ii,msk,gamma,alpha,rx,ry)
-getstuff
+set_params
+load(ts_paramfile)
 im     = sqrt(-1);
 
 display(['filtering ' ints(ii).name])

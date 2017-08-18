@@ -16,6 +16,8 @@ ny            = info(2);
 lambda  = load_rscs(dates(id).raw,'WAVELENGTH');
 %[dop0,dop1,dop2,dop3,azres,squint]=load_rscs('all.dop.rsc','DOPPLER_RANGE0','DOPPLER_RANGE1','DOPPLER_RANGE2','DOPPLER_RANGE3','AZIMUTH_RESOLUTION','SQUINT');
 [nx1,ny1]=load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH');
+    command=['$INT_SCR/use_rsc.pl ' dates(id).slc ' write FILE_LENGTH ' num2str(ny)];
+    mysys(command);
 
 %crop master date if necessary
 if(startline>1)      
@@ -34,13 +36,8 @@ if(startline>1)
     
     command=['rect ' rectin];
     mysys(command);
-    command=['$INT_SCR/use_rsc.pl ' dates(id).slc ' write FILE_LENGTH ' num2str(ny)];
-    mysys(command);
+
     copyfile([dates(id).slc '.rsc'],[dates(id).rectslc '.rsc']);
-    command=['$INT_SCR/use_rsc.pl ' dates(id).rectslc ' write WIDTH ' num2str(nx1)];
-    mysys(command);
-    command=['$INT_SCR/use_rsc.pl ' dates(id).rectslc ' write FILE_LENGTH ' num2str(ny)];
-    mysys(command);
 
 else
     copyfile([dates(id).slc],[dates(id).rectslc]);

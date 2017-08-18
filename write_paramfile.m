@@ -1,4 +1,4 @@
-function write_paramfile(sat,masterdir,id,footprints,plotflag,pixel_ratio,track,frame)
+function write_paramfile(sat,masterdir,id,footprints,plotflag,pixel_ratio,rlk,track,frame)
 
 file=[masterdir 'set_params.m'];
 
@@ -73,6 +73,7 @@ switch sat
         fprintf(fid,['pixel_ratio = 5 ;\n']);
         fprintf(fid,'alooks      = rlooks*pixel_ratio;\n');
 end
+
 
 fprintf(fid,['plotflag=' num2str(plotflag) ';%%0 suppresses plots\n\n']);
 

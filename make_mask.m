@@ -6,12 +6,12 @@ load(ts_paramfile);
 ndates=length(dates);
 nints=length(ints);
 
-if strcmp(sat,'S1A')
-    nx=ints(id).width;
-    ny=ints(id).length;
-else
-    [nx,ny]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH');
-end
+% if strcmp(sat,'S1A')
+%     nx=ints(id).width;
+%     ny=ints(id).length;
+% else
+%     [nx,ny]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH');
+% end
 
 newnx  = floor(nx./rlooks)
 newny  = floor(ny./alooks);

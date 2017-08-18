@@ -5,7 +5,7 @@ load(ts_paramfile);
 if(~exist([DEMdir 'tmp.dem']))
     home=pwd;
     chdir(DEMdir);
-    command=['get_SRTM.pl tmp.dem ' num2str([min([frames.lat]) max([frames.lat]) min([frames.lon]) max([frames.lon]) 1 1])];
+    command=['get_SRTM.pl tmp.dem ' num2str([min([frames.lat])-1 max([frames.lat])+1 min([frames.lon])-1 max([frames.lon])+1 1 1])];
     mysys(command);
     chdir(home)
 end
