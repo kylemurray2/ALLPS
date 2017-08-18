@@ -1,8 +1,8 @@
 % Unwrap_rlooks
 %<^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^
 %   Kyle Murray; July 2017
-%   Takes *bell ints and outputs r4 .unw files.  Uses 35 core parallel
-%   processing and 20x14 tiles
+%   Takes *bell ints and outputs r4 .unw files.  Uses parallel
+%   processing and tiles
 %<^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^><^
 
 clear all;close all
@@ -11,7 +11,7 @@ getstuff
 % Specify snaphu options
 ntilerow=20;
 ntilecol=19;
-nproc=38;
+nproc=8;
 
 
 % Write snaphu configuration files
@@ -36,7 +36,7 @@ for k=1:nints
     else
         disp('unw files already exist. Unwrapping ints and writing over it. Modify write_snaphu_conf() to reunwrap .unw files.')
         disp(['unwrapping ' ints(k).flatrlk{1}]);
-        system(['snaphu -f ' ints(k).unwrlk{1} '_snaphu.conf >> tmp_log']);
+        system(['snaphu -f ' ints(k).unwrlk{1} '_snaphu.conf']);
 
     end
 end
