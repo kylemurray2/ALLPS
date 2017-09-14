@@ -8,16 +8,16 @@ function low_freq_power = lf_power(num_lf_bands)
 % frequency power in the final number. A strong secular rate + seasonal
 % signal would have high power at 1 cycle/year or less
 
-getstuff;l=1;
+set_params
 % Load in stack of dates and find FFT at each pixel
-alld=zeros(ndates,newny(l),newnx(l));
+alld=zeros(ndates,newny,newnx);
 for i=1:ndates
-    if(~exist(dates(i).unwrlk{1}))
+    if(~exist(dates(i).unwrlk))
         display([dates(i).unwrlk{1} ' does not exist'])
         return
     else
-        fid=fopen(dates(i).unwrlk{1},'r');
-        tmp=fread(fid,[newnx(l),newny(l)],'real*4');
+        fid=fopen([dates(i).unwrlk '_corrected'],'r');
+        tmp=fread(fid,[newnx,newny],'real*4');
         alld(i,:,:)=tmp';
     end
 end
@@ -34,9 +34,9 @@ ss = sum(P2(1:num_lf_bands,:),1); %sum the power at the lowest 3 freq bands
 low_freq_power = reshape(ss,[newny,newnx]); %
 
 % Plot resulting LF power image and write to file
-figure;imagesc(low_freq_power);colorbar;caxis([0 40])
-    saveas(gcf,['lf_power_raw'],'svg')
+figure;imagesc(low_freq_power);colorbar;caxis([0 40]);
+    saveas(gcf,['lf_power_raw'],'svg');
 
-fido=fopen(['lowFreqPower' num2str(rlooks(l))],'w');
+fido=fopen(['lowFreqPower' num2str(rlooks)],'w');
 fwrite(fido,low_freq_power,'real*4');fclose(fido);
 save('lf_power','low_freq_power');
