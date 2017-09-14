@@ -15,7 +15,10 @@ maskrgt=mask(2);
 masktop=mask(3);
 maskbot=mask(4);
 
-getstuff
+set_params
+load(ts_paramfile)
+ndates   = length(dates);
+nints    = length(ints);
 
 if(or(or(or(masklft>nx,maskrgt>nx),masktop>ny),maskbot>ny))
     disp('masks must be smaller than size of image')
