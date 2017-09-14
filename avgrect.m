@@ -1,12 +1,12 @@
-getstuff
+set_params
 ndates=length(dates);
 im=sqrt(-1);
 
 fidout=fopen(avgslcfile,'w','native');
 
-if strcmp(sat,'S1A')
+if strcmp(sat,'SENT')
  disp('stacking rectified interferograms magnitudes')
-if strcmp(sat,'S1A')
+if strcmp(sat,'SENT')
     nx=ints(id).width;
     ny=ints(id).length;
 else
