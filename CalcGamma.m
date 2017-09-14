@@ -24,13 +24,10 @@ im = sqrt(-1);
             nonz(goodid)      = nonz(goodid)+1; %adds a one for every int that has a nonzero 
         end
         %phsvar=-2*log(abs(sum(tmpcpx,1)./nonz));
-        
         phsvar=abs(sum(tmpcpx,1)./nonz); %like coherence
-        phsvar(nonz<(nints/2))=0; %if there is one or more nonzeros, make it 0. (0 pixels are set in filter_diff_iter.m)
-
+        phsvar(nonz<nints)=0; %if there is one or more nonzeros, make it 0. (0 pixels are set in filter_diff_iter.m)
         fwrite(fidout,phsvar,'real*4');
-    end
-       
+    end     
     fclose(fidout);
 % end
 
