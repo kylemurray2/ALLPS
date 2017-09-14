@@ -6,22 +6,22 @@ function Mov=plot_images(flag)
 % close all;clear all
 
 set_params
-load(ts_paramfile);
-% load('rates');
-ndates         = length(dates);
-nints          = length(ints);
-if strcmp(sat,'S1A')
-    nx=ints(id).width;
-    ny=ints(id).length;
-else
-    [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
-
-end
-newnx = floor(nx./rlooks);
-newny = floor(ny./alooks);
+% load(ts_paramfile);
+% % load('rates');
+% ndates         = length(dates);
+% nints          = length(ints);
+% if strcmp(sat,'S1A')
+%     nx=ints(id).width;
+%     ny=ints(id).length;
+% else
+%     [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
+% 
+% end
+% newnx = floor(nx./rlooks);
+% newny = floor(ny./alooks);
 
 l=1;%for now, just use first rlooks value (usually 4)
-fid=fopen(maskfilerlk{l},'r');
+fid=fopen(maskfilerlk,'r');
 mask=fread(fid,[newnx(l),newny(l)],'real*4');
 mask=mask';
 badid=find(mask==0);
@@ -32,12 +32,12 @@ fclose(fid);
 switch flag
     case 1 %plot all ints
         for i=1:nints
-            fid=fopen(ints(i).flat,'r');
-            unw=fread(fid,[nx(l),ny(l)],'real*4');
-            unw=unw(:,2:2:end)';
+            fid=fopen([ints(i).flatrlk '_bell'],'r');
+            unw=fread(fid,[newnx,newny],'real*4');
+            unw=unw';
 %             unw(badid)=NaN;
-            imagesc(unw)
-            caxis([-pi pi])
+            imagesc(unw);colorbar
+%             caxis([-pi pi])
            
             title(ints(i).name)
              pause
@@ -49,7 +49,7 @@ switch flag
         if(isfield(ints,'rms'))
             [jnk,sortid]=sort([ints.rms]);
             for i=sortid
-                fid=fopen(ints(i).unwrlk{l},'r');
+                fid=fopen(ints(i).unwrlk,'r');
                 unw=fread(fid,[newnx(l),newny(l)*2],'real*4');
                 unw=unw(:,2:2:end)';
                 unw(badid)=NaN;
@@ -64,17 +64,33 @@ switch flag
             disp('must run calc_rate_residual first')
         end
      case 3  %plot inferred time series, by date
+            fid=fopen([dates(id).unwrlk '_corrected'],'r');
+            def1=fread(fid,[newnx(l),newny(l)],'real*4');
+            fclose(fid);
         for i=1:ndates
-            fid=fopen(char(dates(i).unwrlk),'r');
+            fid=fopen([dates(i).unwrlk '_corrected'],'r');
             def=fread(fid,[newnx(l),newny(l)],'real*4');
-            def=def';
-            def(badid)=NaN;
-            imagesc(def);colorbar;
-            title(dates(i).name)
-            title(dates(i).name)
+            def=def-def1;
+            def=-fliplr(def');
+           def=def(500:3800,200:4000);
+           fig=figure(2);
+           colormap('jet')
+           CLIM=([-200 200]);
+%             def(badid)=NaN;
+            imagesc(def,CLIM);colorbar;hold on
+            text(90, 120,num2str(dates(i).name));
+            
+            
+%             title(dates(i).name)
+%             title(dates(i).name)
             pause(1)
             Mov(i)=getframe;
+                frame=getframe(fig);
+                im=frame2im(frame);
+                [imind,cm] = rgb2ind(im,256);
             fclose(fid);
+            
+            imwrite(imind,cm,['date_figs/' dates(i).name],'png');
         end
         
     case 4  %plot inferred time series, by date and create a profile
