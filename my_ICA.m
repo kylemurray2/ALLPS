@@ -9,17 +9,17 @@ filt_strength = 0.2;
 set_params
 load(ts_paramfile);
 
-ndates         = length(dates);
-nints          = length(ints);
-if strcmp(sat,'S1A')
-    nx=ints(id).width;
-    ny=ints(id).length;
-else
-    [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
-
-end
-newnx = floor(nx./rlooks);
-newny = floor(ny./alooks);
+% ndates         = length(dates);
+% nints          = length(ints);
+% if strcmp(sat,'S1A')
+%     nx=ints(id).width;
+%     ny=ints(id).length;
+% else
+%     [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
+% 
+% end
+% newnx = floor(nx./rlooks);
+% newny = floor(ny./alooks);
 
 l=1;%for now, just use first rlooks value (usually 4)
 % fid=fopen(maskfilerlk{l},'r');
@@ -45,7 +45,7 @@ dy=d(1:ndates)./365.25;
         
 %Load Master int
 
-        fid=fopen(char(dates(1).unwrlk),'r');
+        fid=fopen([dates(1).unwrlk '_corrected'],'r');
             a1=fread(fid,[newnx(l),newny(l)*2],'real*4');
             a1=fliplr(a1'); 
             a1 = blockproc(a1,[down_factor+2 down_factor+2],fun);
@@ -56,8 +56,8 @@ dy=d(1:ndates)./365.25;
 % load('watermask');
 
         for i=1:ndates
-            if exist(dates(1).unwrlk{1})
-            fid=fopen(char(dates(i).unwrlk),'r');
+            if exist(dates(1).unwrlk)
+            fid=fopen([dates(i).unwrlk '_corrected'],'r');
             a=fread(fid,[newnx(l),newny(l)*2],'real*4');
             a=fliplr(a');       
             a = blockproc(a,[down_factor+2 down_factor+2],fun);
