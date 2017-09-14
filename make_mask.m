@@ -1,5 +1,5 @@
 function make_mask(thresh)
-%threshold ~.7?
+
 set_params
 load(ts_paramfile);
 
@@ -16,7 +16,6 @@ nints=length(ints);
 newnx  = floor(nx./rlooks)
 newny  = floor(ny./alooks);
 
-
 fidin  = fopen(gammafile,'r','native');
 fidout = fopen(maskfile,'w','native');
 
@@ -28,10 +27,9 @@ end
 fclose(fidin);
 fclose(fidout);
 
-
 for l=1:length(rlooks)
     fidin  = fopen(maskfile,'r','native');
-    fidout = fopen(maskfilerlk{l},'w');
+    fidout = fopen(maskfilerlk,'w');
     for i=1:newny(l)
         tmp=zeros(nx,alooks(l));
         [jnk,count]=fread(fidin,[nx alooks(l)],'integer*1');
@@ -49,7 +47,7 @@ for l=1:length(rlooks)
     end
     fclose(fidin);
     fclose(fidout);
-   system(['mag_phs2rmg ' maskfilerlk{l} ' ' maskfilerlk{l} ' ' rlkdir{l} 'mask.cor ' num2str(newnx(l))]);
+   system(['mag_phs2rmg ' maskfilerlk ' ' maskfilerlk ' ' rlkdir 'mask.cor ' num2str(newnx(l))]);
 
 end
 
