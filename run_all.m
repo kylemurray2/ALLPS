@@ -45,9 +45,9 @@ make_ramps
 flat_ints
 makeGamma(0) %0, 1, 2, or 3
 makeGamma(1)
-make_mask(.3)
+make_mask(.2)
 smart_rlooks_2
-crop_edges([30*rlooks 30*rlooks 30*alooks 30*alooks]); %full res location of crop (so that it works for multiple rlooks, left right, top, bottom.
+crop_edges([30*rlooks 30*rlooks 400*alooks 30*alooks]); %full res location of crop (so that it works for multiple rlooks, left right, top, bottom.
 ps_interp
 unwrap_rlooks %uses interp files now, does snaphu with tiles.
 
@@ -79,13 +79,13 @@ unw2png_km1(10,20) %(mode,wraprate,scale%) make a .png image of each unw_4lks in
 %iterate over this chunk
 invert_dates(0); %1 looks for .unw_topo.unw files (not made til fitramp_int), 0 looks for normal unw files.
 %%%this generates TS/looks#/date.r4 files and res#.  Res# will have a ramp if not alligned. Choose thresh accordingly
-thresh      =1; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
+thresh      =4; %this currently needs to be "big" for the first round, then iterate once or twice with smaller values.
 edge       = [100 100 10 10*8]; %pixels from left, right, top, bottom edges to mask
 waterheight = [-10]; %mask all pixels with height < waterheight.
 topoflag    = [];
 boxedge     = [0 0 0 0];%[2437 2636 1357 1582]*4;
 fitramp_date(thresh,edge,waterheight,topoflag,boxedge,0);  %topoflag=1 removes topo and writes to *_topo.unw files, 0 is normal. Now uses rates file, if it exists!
-tic
+
 invert_dates(0);
 geocode_dates;
 gps_reference;
@@ -117,6 +117,6 @@ plot_std_profile
 unw2png_km('geo_rates_2.unw',[sat '_T' num2str(track) '_' num2str(frame) '.png'],2,10,50) %infile, outfile, mode(1 is amp, 2 is phs),wraprate,scale(% resize)
 make_frame_gmt
 
-mysys('unw2grd.pl geo_rates_2.unw ALOS_T210_670.grd 1')
+mysys('unw2grd.pl geo_rates_2.unw ENVI_T485_2889.grd')
 
-end
+
