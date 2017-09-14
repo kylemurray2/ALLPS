@@ -1,4 +1,4 @@
-%Creates .rsc files for each topophase.flat int in the ints structure
+%Creates .rsc files for each flat.flat int in the ints structure
 clear all;close all
 
 set_params
@@ -8,16 +8,16 @@ load(ts_paramfile);
 
 for i=1:nints
    %get length and width
-    xmlfilename =[ints(i).topophase '.xml'];
-    system(['sed -n "/width/{n;p;}" ',xmlfilename,' > topophase.flat.xml.txt'])
-    system(['sed -n "/length/{n;p;}" ',xmlfilename,' >> topophase.flat.xml.txt'])  
-   [status, width]=system('i=`awk ''NR==2 {print $1}'' topophase.flat.xml.txt`;echo ${i:7:4}')
-   [status, length]=system('i=`awk ''NR==5 {print $1}'' topophase.flat.xml.txt`;echo ${i:7:4}')
+    xmlfilename =[ints(i).flat '.xml'];
+    system(['sed -n "/width/{n;p;}" ',xmlfilename,' > flat.flat.xml.txt'])
+    system(['sed -n "/length/{n;p;}" ',xmlfilename,' >> flat.flat.xml.txt'])  
+   [status, width]=system('i=`awk ''NR==2 {print $1}'' flat.flat.xml.txt`;echo ${i:7:5}')
+   [status, length]=system('i=`awk ''NR==5 {print $1}'' flat.flat.xml.txt`;echo ${i:7:5}')
    width(strfind(width,'<'))=[];
    length(strfind(length,'<'))=[];
    
    %write the .rsc file
-   out=[ints(i).topophase '.rsc'];
+   out=[ints(i).flat '.rsc'];
    fid = fopen(out,'wt+');
    fprintf(fid,'WIDTH %s\n',num2str(width));
    fprintf(fid,'FILE_LENGTH %s\n',num2str(length));
