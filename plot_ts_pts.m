@@ -2,17 +2,29 @@
 clear all;close all
 % px=[727 460  541 1328 251];
 % py=[550 1491 79 2337 2897];
-clear all;close all
+clear all;%close all
 sites=[{'main'}; {'P544'}; {'CRCN'}; {'BAK1'}; {'P537'}]
+
+px=1449;
+py=4442;%CRCN
+% px=1325;
+% py=3707;
+px=[px px   px+1 px+1 px+2 px+2 px   px+1 px+2];
+py=[py py+1 py   py+1 py   py+1 py+2 py+2 py+2];
+
+
+figure;plot(px,py,'.')
+=======
 % px=1553;
 % py=1248;
 px=2221;py=1422;
+
 %example:
 %px=[1076 1015 1135 693 637 699 722];
 %py=[1655 1504 1498 2069 1980 2065 2152];
 
 set_params
-% load(ts_paramfile)
+
 % ndates  = length(dates);
 % nints   = length(ints);
 % if strcmp(sat,'S1A')
@@ -42,6 +54,12 @@ for i=1:ndates
     end
     fclose(fid);
 end
+
+
+for i=1:ndates
+    tsphs(i)=median(ts_phs(i,:));
+end
+ts_phs=tsphs';
 
 %get int values
 % for i=1:nints
@@ -143,14 +161,28 @@ for i=1:length(dates)
 end
 %project to vertical
 ts_phs = ts_phs;%/cosd(25);
-save('sent_ts_global_offset_ramp','ts_phs')
+
 d=datenum(datenumbers,'yyyymmdd');
 dy=d./365.25;
-figure
-plot(dy,ts_phs,'k.');hold on
-datetick('x','keepticks','keeplimits')
-title(['at pixel: ' num2str(px) ', ' num2str(py) ])
-kylestyle
+figure;plot(dy,ts_phs,'.');kylestyle;xlabel('time');ylabel('LOS disp (cm)')
+save('ALOS_TS_CRCN','ts_phs')
+save('ALOS_TS_dy','dy')
+
+
+% figure
+% plot(dy,values,'k.-')
+% datetick('x','keepticks','keeplimits')
+% title(['at pixel: ' num2str(px) ', ' num2str(py) ])
+% kylestyle
+
+%save('sent_ts_global_offset_ramp','ts_phs')
+%d=datenum(datenumbers,'yyyymmdd');
+%dy=d./365.25;
+%figure
+%plot(dy,ts_phs,'k.');hold on
+%datetick('x','keepticks','keeplimits')
+%title(['at pixel: ' num2str(px) ', ' num2str(py) ])
+%kylestyle
 
 % get the GPS site
  [gps_year, gps_e, gps_n, gps_v]=readGPS_TS('CRCN',1);

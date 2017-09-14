@@ -49,19 +49,6 @@ lookup_file = 'GEO/geomap_2rlks.trans';
 command = ['geocode.pl ' lookup_file ' rates_2.unw ' out_2lks];
 mysys(command)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 else
 
 %Geocode a 4rlks unw file
