@@ -1,19 +1,19 @@
 %Mask Unwrapped
 clear all;close all
-gammathresh=.4;
-getstuff
+gammathresh=.1;
+set_params
 
 %load mask file
-mask_file=maskfilerlk{1};
+mask_file=maskfilerlk;
 
 fid=fopen(mask_file,'r','native');
 msk=fread(fid,[newnx,newny],'real*4');
 fclose(fid);
 figure;imagesc(msk);colorbar
 
-parfor ii=1%:nints
-  filename=[ints(ii).unwrlk{1}];
-  display(['Masking ' ints(ii).name])
+ii=4;
+  filename=[ints(ii).unwrlk];
+  display(['Masking ' ints(ii).unwrlk '_no_filt'])
   fid         = fopen(filename,'r','native');
   [phs,count] = fread(fid,[newnx,newny],'real*4');
   fclose(fid);
@@ -21,17 +21,19 @@ parfor ii=1%:nints
    fwrite(fid,phs,'real*4')
    fclose(fid)
   
+   mask=ones(size(phs));
+   mask(find(msk<gammathresh))=0;
   phs(find(msk<gammathresh))=0;
   
-  fid=fopen('phs_masked','w','native');
+  fid=fopen('phs_masked1','w','native');
      fwrite(fid,phs,'real*4');
      fclose(fid);
 
-   system(['mag_phs2rmg phs_unmasked phs_masked ' ints(ii).unwrlk{1} ' ' num2str(newnx)]);
-  
-end
+  fid=fopen('mask1','w','native');
+     fwrite(fid,mask,'real*4');
+     fclose(fid);
 
-
+system(['mag_phs2rmg mask1 phs_masked1 out1 4233'])
 % Split back to r4
 % clear all;close all
 % getstuff
