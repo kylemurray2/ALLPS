@@ -3,14 +3,15 @@ set_params
 load(ts_paramfile)
 im     = sqrt(-1);
 
+
 display(['filtering ' ints(ii).name])
     %load int phase and correlation
-    intfile=[ints(ii).flatrlk{1}];
+    intfile=[ints(ii).flatrlk];
     fid=fopen(intfile,'r','native');
     [phs1,count] = fread(fid,[newnx,newny],'real*4');
     fclose(fid);
     
-    corfile=[ints(ii).flatrlk{1} '.cor'];
+    corfile=[ints(ii).flatrlk '.cor'];
     fid=fopen(corfile,'r','native');
     [cor,count] = fread(fid,[newnx,newny],'real*4');
     fclose(fid);
@@ -58,12 +59,12 @@ display(['filtering ' ints(ii).name])
             phs = angle(real_final+im*imag_final);
             phs(isnan(phs))=0;
             
-            display([num2str(100*(sum(mask(:))/(newnx*newny))) '% of points left after masking'])
+            display([num2str(100-(100*(sum(mask(:))/(newnx*newny)))) '% of points left after masking'])
 %             fid=fopen('phs','w');
 %             fwrite(fid,flipud(phs)','real*4');
 %             fclose(fid);
 %             system(['mag_phs2cpx ' maskfilerlk{1} ' phs ' ints(ii).flatrlk{1} '_bell ' num2str(newnx)]);
-            fid=fopen([ints(ii).flatrlk{1} '_bell'],'w');
+            fid=fopen([ints(ii).flatrlk '_bell'],'w');
             fwrite(fid,phs,'real*4');
 
     
