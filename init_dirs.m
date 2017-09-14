@@ -4,7 +4,7 @@ end
 
 set_params
 if(~exist('figs','dir'))
-    mkdir(figs);
+    mkdir('figs');
 end
 
 if(~exist('baddatedir','dir'))
@@ -28,8 +28,8 @@ if(~exist(DEMdir,'dir'))
 end
 
 for i=1:length(rlooks)
-    if(~exist(rlkdir{i},'dir'))
-        mkdir(rlkdir{i});
+    if(~exist(rlkdir,'dir'))
+        mkdir(rlkdir);
     end
 end
 
