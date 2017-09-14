@@ -1,29 +1,29 @@
 % function values=plot_ts_pts(px,py)
-% clear all;close all
+clear all;close all
 % px=[727 460  541 1328 251];
 % py=[550 1491 79 2337 2897];
 clear all;close all
 sites=[{'main'}; {'P544'}; {'CRCN'}; {'BAK1'}; {'P537'}]
 % px=1553;
 % py=1248;
-px=1673;py=4876;
+px=2221;py=1422;
 %example:
 %px=[1076 1015 1135 693 637 699 722];
 %py=[1655 1504 1498 2069 1980 2065 2152];
 
 set_params
-load(ts_paramfile)
-ndates  = length(dates);
-nints   = length(ints);
-if strcmp(sat,'S1A')
-    nx=ints(id).width;
-    ny=ints(id).length;
-else
-    [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
-
-end
-newnx   = floor(nx./rlooks)
-newny   = floor(ny./alooks);
+% load(ts_paramfile)
+% ndates  = length(dates);
+% nints   = length(ints);
+% if strcmp(sat,'S1A')
+%     nx=ints(id).width;
+%     ny=ints(id).length;
+% else
+%     [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
+% 
+% end
+% newnx   = floor(nx./rlooks)
+% newny   = floor(ny./alooks);
 
 [X,Y] = meshgrid(1:newnx,1:newny);
 
@@ -33,7 +33,7 @@ dn    = dn-dn(1);
 l=1;
 
 for i=1:ndates
-    fid=fopen(dates(i).unwrlk{l},'r');
+    fid=fopen([dates(i).unwrlk '_corrected'],'r');
     for j=1:length(px)
         fseek(fid,0,-1);
         tmp=fread(fid,(newnx(l)*(py(j)-1)+px(j)-1),'real*4');
@@ -44,15 +44,15 @@ for i=1:ndates
 end
 
 %get int values
-for i=1:nints
-    fid=fopen(ints(i).unwrlk{l},'r');
-    for j=1:length(px)
-        fseek(fid,0,-1);
-        tmp=fread(fid,(newnx(l)*(py(j)-1)+px(j)-1),'real*4');
-        values_ints(i,j)=fread(fid,1,'real*4');
-    end
-    fclose(fid);
-end
+% for i=1:nints
+%     fid=fopen(ints(i).unwrlk '_corrected','r');
+%     for j=1:length(px)
+%         fseek(fid,0,-1);
+%         tmp=fread(fid,(newnx(l)*(py(j)-1)+px(j)-1),'real*4');
+%         values_ints(i,j)=fread(fid,1,'real*4');
+%     end
+%     fclose(fid);
+% end
 
 
 % %for each int, find difference between its displacement and the cumulative
@@ -116,7 +116,7 @@ end
 %     end
 %     
 % for i=1:ndates
-%     fid=fopen(dates(i).unwrlk{l},'r');
+%     fid=fopen(dates(i).unwrlk,'r');
 %     for j=1:length(px)
 %         fseek(fid,0,-1);
 %         tmp=fread(fid,(newnx(l)*(py(j)-1)+px(j)-1),'real*4');
@@ -142,27 +142,28 @@ for i=1:length(dates)
     dnum(i) = str2num(datenumbers(i,:));
 end
 %project to vertical
-ts_phs = ts_phs/cosd(25);
+ts_phs = ts_phs;%/cosd(25);
+save('sent_ts_global_offset_ramp','ts_phs')
 d=datenum(datenumbers,'yyyymmdd');
 dy=d./365.25;
-% figure
-% plot(dy,values,'k.-')
-% datetick('x','keepticks','keeplimits')
-% title(['at pixel: ' num2str(px) ', ' num2str(py) ])
-% kylestyle
+figure
+plot(dy,ts_phs,'k.');hold on
+datetick('x','keepticks','keeplimits')
+title(['at pixel: ' num2str(px) ', ' num2str(py) ])
+kylestyle
 
-%get the GPS site
-%  [gps_year, gps_e, gps_n, gps_v]=readGPS_TS('CRCN',1);
+% get the GPS site
+ [gps_year, gps_e, gps_n, gps_v]=readGPS_TS('CRCN',1);
 
 %get rid of offset in gps data
-% gps_v(1932:end) = gps_v(1932:end) + (-gps_v(1932)+gps_v(1930));
+ gps_v(1932:end) = gps_v(1932:end) + (-gps_v(1932)+gps_v(1930));
  
 % start_id = find(round((gps_year*1000))/1000 == round((dy(1)*1000))/1000);
 % insar_vert=nan(1,length(gps_year));
 % insar_vert(start_id:length(dy)+start_id-1)=values/cosd(23)+gps_v(start_id);
 % insar_vert2 = values/cosd(30);
 % insar_vert2= insar_vert2+110
-
+% 
 % load 's1a_dates'
 % load 's1a_disp'
 
@@ -172,14 +173,14 @@ dy=d./365.25;
 % xlabel('years')
 % ylabel('Displacement (cm)')
 % kylestyle
-
+% 
 % gps_v=(gps_v); %multiply meters by 100 to get cm
 % gps_v=gps_v - mean(gps_v(1:20))-28; %subtract mean of some of the values near first insar data points (choose range manually)
-% plot(gps_year,gps_v,'.')
+% plot(gps_v,'.')
 % kylestyle
 
 %% now fit a seasonal rate
-run_seasfun
+% run_seasfun
 
 % %% now plot GPS data on same figures (7,6,5,4) {'P544'}; {'CRCN'}; {'BAK1'}; {'P537'}
 % 
