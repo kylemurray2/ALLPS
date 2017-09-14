@@ -1,5 +1,5 @@
 function plot_all_pts(lat_pt,lon_pt,site_name)
-% site_name=site_name{1};
+% site_name=site_name;
 %Plots time series at specified lat/lon of geocoded inverted dates
 %use geocode_dates to get geocoded dates
 
@@ -12,7 +12,7 @@ getstuff
 datenumbers=char(dates.name);
 
 %load first geocoded int and get grid
-    geo_int=[rlkdir{1} dates(1).name '_geo_2rlks.unw'];
+    geo_int=[rlkdir dates(1).name '_geo_2rlks.unw'];
     rate_struct=load_any_data(geo_int,'11N');
     phs_X=rate_struct.X;
     phs_Y=rate_struct.Y;
@@ -35,14 +35,14 @@ end
 
 %load the rest of the geocoded ints
 for ii=2:ndates
-    %     geo_int=[rlkdir{1} dates(ii).name 'geo_2rlks.unw'];
+    %     geo_int=[rlkdir dates(ii).name 'geo_2rlks.unw'];
     %     fid=fopen(geo_int,'r','native');
     %     [rmg,~] = fread(fid,[nx1,ny*2],'real*4');
     %     rmg = -rmg(xzone(1):xzone(2),:);
     %     fclose(fid);
     %     phs_grd=flipud((rmg(1:nx,2:2:ny*2))');
     %     phs_vec=phs_grd(:)*lambda/(4*pi)*100; %convert to cm
-    geo_int=[rlkdir{1} dates(ii).name '_geo_2rlks.unw'];
+    geo_int=[rlkdir dates(ii).name '_geo_2rlks.unw'];
     rate_struct=load_any_data(geo_int,'11N');
     phs_grd=-rate_struct.phs *lambda/(4*pi)*100; %convert to cm
     phs_grd=phs_grd-phs_grd_one;
@@ -70,8 +70,8 @@ rates_grd(find(rates_grd==0))=nan;
 
 for jj=1:length(lat_pt)
     %project to vertical
-    vert_disp = ts_phs(:,jj)/cosd(25);
-    
+    vert_disp = ts_phs(:,jj);%/cosd(25);
+    save('ENVI_TS_CRCN','vert_disp');
     %get the GPS site
     [gps_year,~,~, gps_v]=readGPS_TS(site_name{jj},2); %outputs in cm
     
