@@ -2,16 +2,16 @@ function invert_dates(topoflag)
 % topoflag=0;
 %0 looks for unwrlk{l}, 1 adds _topo.unw to name.
 set_params
-load(ts_paramfile)
+
 [G,Gg,R,N]=build_Gint;
 [m,n]=size(Gg);
 
 for l=1:length(rlooks)
     for i=1:nints
         if(topoflag)
-            infile=[ints(i).unwrlk{l} '_topo.unw'];
+            infile=[ints(i).unwrlk '_topo.unw'];
         else
-            infile=[ints(i).unwrlk{l}];
+            infile=[ints(i).unwrlk];
         end
         if(~exist(infile))
             disp([infile ' does not exist'])
@@ -24,7 +24,7 @@ for l=1:length(rlooks)
     end
     for i=1:ndates
         
-        fido(i)=fopen([rlkdir{1} dates(i).name '_' num2str(rlooks) 'rlks.r4'],'w');
+        fido(i)=fopen([rlkdir dates(i).name '_' num2str(rlooks) 'rlks.r4'],'w');
     end
     fido2=fopen(['res_' num2str(rlooks(l))],'w');
     

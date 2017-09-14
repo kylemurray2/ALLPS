@@ -1,18 +1,18 @@
 
-load(ts_paramfile);
-
-ndates         = length(dates);
-nints          = length(ints);
-[nx,ny,lambda] = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
-
-newnx = floor(nx./rlooks)
-newny = floor(ny./alooks);
+set_params
+% 
+% ndates         = length(dates);
+% nints          = length(ints);
+% [nx,ny,lambda] = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
+% 
+% newnx = floor(nx./rlooks)
+% newny = floor(ny./alooks);
 
 for l=1:length(rlooks)
     fidr = fopen(['rates_' num2str(rlooks(l))],'r');
   
     for i=1:nints
-        fidi(i)   = fopen(ints(i).unwrlk{l},'r');
+        fidi(i)   = fopen(ints(i).unwrlk,'r');
         intrms(i) = 0;
     end
     

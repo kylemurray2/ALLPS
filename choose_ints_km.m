@@ -78,6 +78,10 @@ if(~isempty(addpairs))
     i2=[i2;addpairs(:,2)];
 end
 
+
+i1=[ints.i1];
+i2=[ints.i2];
+
 if(plotflag)
     dnpair=[dates(i1).dn;dates(i2).dn];
     bppair=[dates(i1).bp;dates(i2).bp];

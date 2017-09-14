@@ -1,20 +1,21 @@
 function plot_pts_geo(lat_pt,lon_pt)
-% site_name=site_name{1};
+% site_name=site_name;
 %Plots time series at specified lat/lon of geocoded inverted dates
 %use geocode_dates to get geocoded dates
 
 % %Specify coordinates
 % lat_pt=36.113986013;
 % lon_pt=-119.568033605;
-
-getstuff
+suffix='.geo'
+% suffix='_geo_2rlks.unw'
+set_params
 datenumbers=char(dates.name);
 % Define variables to plot profiles later
     xi = [-119.2984; -119.8483];
     yi = [36.0881; 35.2293];
     
 %load first geocoded int and get grid
-    geo_int=[rlkdir{1} dates(1).name '_geo_2rlks.unw'];
+    geo_int=[rlkdir dates(1).name suffix];
     rate_struct=load_any_data(geo_int,'11N');
     phs_X=rate_struct.X;
     phs_Y=rate_struct.Y;
@@ -45,7 +46,7 @@ end
 
 %load the rest of the geocoded ints
 for ii=2:ndates
-    geo_int=[rlkdir{1} dates(ii).name '_geo_2rlks.unw'];
+    geo_int=[rlkdir dates(ii).name suffix];
     rate_struct=load_any_data(geo_int,'11N');
     phs_grd=-rate_struct.phs *lambda/(4*pi)*100; %convert to cm
     phs_grd=phs_grd-phs_grd_one;

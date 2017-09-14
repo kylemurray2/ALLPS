@@ -4,23 +4,23 @@ function write_snaphu_conf(ntilerow,ntilecol,nproc)
 % nproc: how many processors to split the tile processes on (Mongoose has
 % 40 cores, and packrat has 32
 set_params
-load(ts_paramfile)
+
 for ii=1:nints
     
-    conf =[ints(ii).unwrlk{1} '_snaphu.conf'];
+    conf =[char(ints(ii).unwrlk) '_snaphu.conf'];
     fid=fopen(conf,'w');
     
     fprintf(fid,['# Input                                                         \n']);
-    fprintf(fid,['INFILE ' [ints(ii).flatrlk{1} '_bell']                          '\n']);
+    fprintf(fid,['INFILE ' [ints(ii).flatrlk '_bell']                          '\n']);
 %     fprintf(fid,['UNWRAPPED_IN TRUE                                               \n']);
     fprintf(fid,['# Input file line length                                        \n']);
     fprintf(fid,['LINELENGTH '    num2str(newnx)                                 '\n']);
     fprintf(fid,['                                                                \n']);
     fprintf(fid,['# Output file name                                              \n']);
-    fprintf(fid,['OUTFILE ' [ints(ii).unwrlk{1}]                                  '\n']);
+    fprintf(fid,['OUTFILE ' [char(ints(ii).unwrlk)]                                  '\n']);
     fprintf(fid,['                                                                \n']);
     fprintf(fid,['# Correlation file name                                         \n']);
-    fprintf(fid,['CORRFILE  '      maskfilerlk{1}                                '\n']);
+    fprintf(fid,['CORRFILE  '      maskfilerlk                                '\n']);
     fprintf(fid,['                                                                \n']);
     fprintf(fid,['# Statistical-cost mode (TOPO, DEFO, SMOOTH, or NOSTATCOSTS)    \n']);
     fprintf(fid,['STATCOSTMODE    SMOOTH                                          \n']);
