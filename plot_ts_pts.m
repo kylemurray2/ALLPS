@@ -2,28 +2,34 @@
 % clear all;close all
 % px=[727 460  541 1328 251];
 % py=[550 1491 79 2337 2897];
-clear all;close all
+clear all;%close all
 sites=[{'main'}; {'P544'}; {'CRCN'}; {'BAK1'}; {'P537'}]
-% px=1553;
-% py=1248;
-px=1673;py=4876;
+px=1449;
+py=4442;%CRCN
+% px=1325;
+% py=3707;
+px=[px px   px+1 px+1 px+2 px+2 px   px+1 px+2];
+py=[py py+1 py   py+1 py   py+1 py+2 py+2 py+2];
+
+
+figure;plot(px,py,'.')
 %example:
 %px=[1076 1015 1135 693 637 699 722];
 %py=[1655 1504 1498 2069 1980 2065 2152];
 
 set_params
 load(ts_paramfile)
-ndates  = length(dates);
-nints   = length(ints);
-if strcmp(sat,'S1A')
-    nx=ints(id).width;
-    ny=ints(id).length;
-else
-    [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
-
-end
-newnx   = floor(nx./rlooks)
-newny   = floor(ny./alooks);
+% ndates  = length(dates);
+% nints   = length(ints);
+% if strcmp(sat,'S1A')
+%     nx=ints(id).width;
+%     ny=ints(id).length;
+% else
+%     [nx,ny,lambda]     = load_rscs(dates(id).slc,'WIDTH','FILE_LENGTH','WAVELENGTH');
+% 
+% end
+% newnx   = floor(nx./rlooks)
+% newny   = floor(ny./alooks);
 
 [X,Y] = meshgrid(1:newnx,1:newny);
 
@@ -42,6 +48,12 @@ for i=1:ndates
     end
     fclose(fid);
 end
+
+
+for i=1:ndates
+    tsphs(i)=median(ts_phs(i,:));
+end
+ts_phs=tsphs';
 
 %get int values
 for i=1:nints
@@ -142,9 +154,14 @@ for i=1:length(dates)
     dnum(i) = str2num(datenumbers(i,:));
 end
 %project to vertical
-ts_phs = ts_phs/cosd(25);
+ts_phs = ts_phs;%/cosd(25);
 d=datenum(datenumbers,'yyyymmdd');
 dy=d./365.25;
+figure;plot(dy,ts_phs,'.');kylestyle;xlabel('time');ylabel('LOS disp (cm)')
+save('ALOS_TS_CRCN','ts_phs')
+save('ALOS_TS_dy','dy')
+
+
 % figure
 % plot(dy,values,'k.-')
 % datetick('x','keepticks','keeplimits')
@@ -179,7 +196,7 @@ dy=d./365.25;
 % kylestyle
 
 %% now fit a seasonal rate
-run_seasfun
+% run_seasfun
 
 % %% now plot GPS data on same figures (7,6,5,4) {'P544'}; {'CRCN'}; {'BAK1'}; {'P537'}
 % 
